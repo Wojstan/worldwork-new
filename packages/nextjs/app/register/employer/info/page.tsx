@@ -34,7 +34,7 @@ const EmployerInfo: NextPage = () => {
       ],
     }, {
       onSuccess: () => {
-        router.push('/jobs')
+        router.push('/company/offers')
       }
     })
 

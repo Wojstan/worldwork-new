@@ -35,7 +35,7 @@ const EmployeeInfo: NextPage = () => {
       ],
     }, {
       onSuccess: () => {
-        router.push('/jobs')
+        router.push('/employee/offers')
       }
     })
 

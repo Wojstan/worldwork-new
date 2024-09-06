@@ -1,7 +1,7 @@
 'use client'
 
 import { NextPage } from 'next'
-import { Job, JobBox } from '~~/components/job/Job'
+import { Job, JobBoxLink } from '~~/components/job/Job'
 import { Heading1 } from '~~/components/ui/Heading1'
 import { Heading3 } from '~~/components/ui/Heading3'
 
@@ -48,10 +48,9 @@ const Jobs: NextPage = () => {
 
       <div className="flex flex-col gap-3">
         {jobs.map((job) => (
-          <JobBox key={job.image} job={job} />
+          <JobBoxLink key={job.image} job={job} href="/jobs/details" />
         ))}
       </div>
-
       <img className="absolute bottom-0 right-0" src="/jobs.svg" alt="" />
     </div>
   )

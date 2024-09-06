@@ -26,7 +26,7 @@ export function JobBox({ job, hideArrow = false, className }: JobBoxProps) {
     <div
       className={`border border-black h-28 rounded-xl bg-white z-50 flex items-center justify-between px-6 hover:bg-[#F8F2FF] hover:border-[#CFAAFF] transition cursor-pointer ${className}`}
     >
-      {image && <Image alt="Logo" src={image} width={40} height={40} />}
+      {image && <Image alt="Logo" src={image} width={80} height={80} />}
       {company && <Heading3 className="mb-0 w-36">{company}</Heading3>}
 
       <div className="w-44">{position}</div>
@@ -59,8 +59,8 @@ export function JobBoxLink({ job, hideArrow = false, className, href }: JobBoxLi
       className={`border border-black h-28 rounded-xl bg-white z-50 flex items-center justify-between px-6 hover:bg-[#F8F2FF] hover:border-[#CFAAFF] transition cursor-pointer ${className}`}
       href={href}
     >
-      <Image alt="Logo" src={image} width={40} height={40} />
-      <Heading3 className="mb-0 w-36">{company}</Heading3>
+      {image && <Image alt="Logo" src={image} width={40} height={40} />}
+      {company && <Heading3 className="mb-0 w-36">{company}</Heading3>}
 
       <div className="w-44">{position}</div>
 

@@ -25,7 +25,7 @@ const Home: NextPage = () => {
 
   const onLogin = () => {
     if (isConnected) {
-      router.push('/employee')
+      router.push('/employee/offers')
       return
     }
     openConnectModal?.()

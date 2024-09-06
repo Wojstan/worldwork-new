@@ -1,5 +1,4 @@
 'use client'
-
 import { NextPage } from 'next'
 import { Button } from '~~/components/ui/Button'
 import { Heading1 } from '~~/components/ui/Heading1'
@@ -7,11 +6,10 @@ import { Input } from '~~/components/ui/Input'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useScaffoldWriteContract } from '~~/hooks/scaffold-eth'
 import { decodeAbiParameters } from 'viem'
-
+import { addEmployer } from './action'
 
 const EmployeeInfo: NextPage = () => {
   const searchParams = useSearchParams()
-  console.log(searchParams)
   const address = searchParams.get('address')
   const merkle_root = searchParams.get('merkle_root')
   const nullifier_hash = searchParams.get('nullifier_hash')
@@ -20,6 +18,16 @@ const EmployeeInfo: NextPage = () => {
   const router = useRouter()
 
   const onSubmit = async (formData: FormData) => {
+    const asd = await fetch('http://localhost:3000/api/', {
+      method: 'POST',
+      body: JSON.stringify({
+        name: 'John',
+        surname: 'Doe'
+      })
+    })
+    console.log('asd', asd)
+    await addEmployer(formData)
+    return
     if (!address || !merkle_root || !nullifier_hash || !proof || !formData) {
       throw new Error('Invalid parameters')
     }
@@ -34,7 +42,9 @@ const EmployeeInfo: NextPage = () => {
         unpackedProof
       ],
     }, {
-      onSuccess: () => {
+      onSuccess: async () => {
+        console.log('onSuccess')
+        await addEmployer(formData)
         router.push('/jobs')
       }
     })

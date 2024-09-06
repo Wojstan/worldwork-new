@@ -19,26 +19,41 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
     with a random private key in the .env file (then used on hardhat.config.ts)
     You can run the `yarn account` command to check your balance in every network.
   */
+
+  if(hre.network.name != 'localhost'){
+    return
+  }
   const { deployer } = await hre.getNamedAccounts();
   const { deploy } = hre.deployments;
 
-  await deploy("YourContract", {
+  const worldId =  await deploy("WorldId", {
     from: deployer,
     // Contract constructor arguments
-    args: [deployer],
     log: true,
     // autoMine: can be passed to the deploy function to make the deployment process faster on local networks by
     // automatically mining the contract deployment transaction. There is no effect on live networks.
     autoMine: true,
   });
 
-  // Get the deployed contract to interact with it after deploying.
-  const yourContract = await hre.ethers.getContract<Contract>("YourContract", deployer);
-  console.log("👋 Initial greeting:", await yourContract.greeting());
+  if (!worldId.receipt){
+    throw new Error('WorldId contract deployment failed')
+  }
+  
+  await deploy("WorldWork", {
+    from: deployer,
+    // Contract constructor arguments
+    log: true,
+    args: [
+      worldId.receipt.contractAddress,
+      'app_staging_47391015481f14b9ef820719cb4383a7',
+      'regiter-work-user',
+    ],
+    // autoMine: can be passed to the deploy function to make the deployment process faster on local networks by
+    // automatically mining the contract deployment transaction. There is no effect on live networks.
+    autoMine: true,
+  });
+
+
 };
 
 export default deployYourContract;
-
-// Tags are useful if you have multiple deploy files and only want to run one of them.
-// e.g. yarn deploy --tags YourContract
-deployYourContract.tags = ["YourContract"];

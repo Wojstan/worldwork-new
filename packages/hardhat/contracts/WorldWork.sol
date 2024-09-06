@@ -41,7 +41,7 @@ contract WorldWork {
 	/// @dev Whether a nullifier hash has been used already. Used to guarantee an action is only performed once by a single person
 	mapping(uint256 => bool) internal nullifierHashes;
 
-	event EmployerRegistered(address indexed doctor, string filesCid);
+	event EmployerRegistered(address indexed employer);
 	event WorkerRegistered(address indexed patient);
 	// event VisitFinalized(
 	// 	address indexed patient,
@@ -115,8 +115,7 @@ contract WorldWork {
 		address signal,
 		uint256 root,
 		uint256 nullifierHash,
-		uint256[8] calldata proof,
-		string calldata filesCid
+		uint256[8] calldata proof
 	) public {
 		// First, we make sure this person hasn't done this before
 		if (nullifierHashes[nullifierHash]) revert InvalidNullifier();
@@ -137,7 +136,7 @@ contract WorldWork {
 
 		employers[signal] = true;
 
-		emit EmployerRegistered(signal, filesCid);
+		emit EmployerRegistered(signal);
 	}
 
 	// function finalizeVisit(

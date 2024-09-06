@@ -19,13 +19,13 @@ const Home: NextPage = () => {
 
   useEffect(() => {
     if (clickedConnect && isConnected) {
-      router.push('/jobs')
+      router.push('/employee')
     }
   }, [clickedConnect, isConnected, router]);
 
   const onLogin = () => {
     if (isConnected) {
-      router.push('/jobs')
+      router.push('/employee')
       return
     }
     openConnectModal?.()

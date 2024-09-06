@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import Image from 'next/image'
 import { NextPage } from 'next'
+import { BackButton } from '~~/components/ui/BackButton'
 import { Button } from '~~/components/ui/Button'
 import { Heading1 } from '~~/components/ui/Heading1'
 import { Heading3 } from '~~/components/ui/Heading3'
@@ -11,7 +12,7 @@ import { Input } from '~~/components/ui/Input'
 const AddJob: NextPage = () => {
   return (
     <div className="flex flex-col items-center content-center gap-10 max-w-[1000px]">
-      <div className="flex flex-col gap-1">
+      <div className="flex flex-col gap-1 text-center">
         <Heading1>Add new job offer</Heading1>
         <Heading3>Please provide all details of the offer</Heading3>
       </div>

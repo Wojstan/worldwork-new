@@ -1,16 +1,58 @@
 'use client'
 
 import { NextPage } from 'next'
+import { Job, JobBox } from '~~/components/job/Job'
 import { Heading1 } from '~~/components/ui/Heading1'
 import { Heading3 } from '~~/components/ui/Heading3'
+
+const jobs: Job[] = [
+  {
+    image: '/worldcoin.png',
+    company: 'Worldcoin',
+    position: 'React developer',
+    primarySalary: 5000,
+    secondarySalary: 10000,
+    location: 'Berlin, Germany',
+  },
+  {
+    image: '/ens.png',
+    company: 'ENS',
+    position: 'Rust developer',
+    primarySalary: 5000,
+    secondarySalary: 10000,
+    location: 'Fully remote',
+  },
+  {
+    image: '/celo.png',
+    company: 'CELO',
+    position: 'Backend developer',
+    primarySalary: 5000,
+    secondarySalary: 10000,
+    location: 'Fully remote',
+  },
+  {
+    image: '/eth.png',
+    company: 'ETH WARSAW',
+    position: 'Volounteer',
+    primarySalary: 5000,
+    secondarySalary: 10000,
+    location: 'Warsaw, Poland',
+  },
+]
 
 const Jobs: NextPage = () => {
   return (
     <div>
-      <Heading1>Are you looking for a job?</Heading1>
-      <Heading3 className="mt-8">Your history:</Heading3>
+      <Heading1>Are you looking for a job? :)</Heading1>
+      <Heading3 className="mt-8">Available jobs:</Heading3>
 
-      <img className="absolute bottom-0 right-0" src="/history.svg" alt="" />
+      <div className="flex flex-col gap-3">
+        {jobs.map((job) => (
+          <JobBox key={job.image} job={job} />
+        ))}
+      </div>
+
+      <img className="absolute bottom-0 right-0" src="/jobs.svg" alt="" />
     </div>
   )
 }

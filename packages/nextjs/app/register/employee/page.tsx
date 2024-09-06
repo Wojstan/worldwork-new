@@ -10,6 +10,7 @@ import { worldAction, worldIdApp } from '~~/app/constants'
 import { Heading1 } from '~~/components/ui/Heading1'
 import { Heading3 } from '~~/components/ui/Heading3'
 import { useScaffoldWriteContract } from '~~/hooks/scaffold-eth'
+import Image from "next/image";
 
 const PatientSignin: NextPage = () => {
   const { openConnectModal } = useConnectModal()
@@ -26,18 +27,12 @@ const PatientSignin: NextPage = () => {
   }
 
   const onSuccess = async (result: ISuccessResult) => {
-    const unpackedProof = decodeAbiParameters([{ type: 'uint256[8]' }], result.proof as `0x${string}`)[0]
-    await writeYourContractAsync(
-      {
-        functionName: 'registerWorker',
-        args: [address, BigInt(result.merkle_root), BigInt(result.nullifier_hash), unpackedProof],
-      },
-      {
-        onSuccess: () => {
-          router.push('/register/patient/info')
-        },
-      },
-    )
+    const redirectParams = new URLSearchParams()
+    redirectParams.append('address', address as string)
+    redirectParams.append('merkle_root', result.merkle_root)
+    redirectParams.append('nullifier_hash', result.nullifier_hash)
+    redirectParams.append('proof', result.proof)
+    router.push(`/register/employee/info?${redirectParams.toString()}`)
   }
 
   return (
@@ -65,7 +60,9 @@ const PatientSignin: NextPage = () => {
           {({ open }: { open: () => void }) => (
             // This is the button that will open the IDKit modal
             <button onClick={open} className="btn btn-outline rounded-full">
-             icon
+
+             <Image alt="Logo" src="/worldwork.svg" width={24} height={24} />
+
               <span>Connect with World ID</span>
             </button>
           )}

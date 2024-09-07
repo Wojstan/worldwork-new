@@ -26,7 +26,7 @@ const Jobs: NextPage = () => {
       ) : (
         <div className="flex flex-col gap-3">
           {data?.map((job) => (
-            <JobBoxLink key={job.job.name} job={job} href={`/employee/offers/${job.job.arrayIndex}`} />
+            <JobBoxLink key={job.job.name} job={job.job} employee={job.employee} href={`/employee/offers/${job.job.arrayIndex}`} />
           ))}
         </div>
       )}

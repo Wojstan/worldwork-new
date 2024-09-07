@@ -1,3 +1,5 @@
+'use client'
+
 import Link from 'next/link'
 import { EmployerJobBox } from '~~/components/job/EmployerJob'
 import { Button } from '~~/components/ui/Button'
@@ -26,14 +28,15 @@ export function CompanyOffers() {
   const { address } = useAccount()
 
   const { data } = useQuery({
-    queryKey: ['jobOffers'],
+    queryKey: ['jobOffers', address],
     queryFn: async () => {
+      console.log('address: ', address)
       if (!address) return []
       return await getCompanyOffers(address)
     },
+    enabled: !!address
   })
 
-  
   return (
     <div>
       <Heading1>Company data</Heading1>

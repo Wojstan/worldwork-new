@@ -35,10 +35,10 @@ export type NewEmployer = z.infer<typeof insertEmployerSchema>
 
 export const insertEmployeeSchema = createInsertSchema(employee)
 export const selectEmployeeSchema = createSelectSchema(employee)
-export type Employee = z.infer<typeof insertEmployeeSchema>
-export type NewEmployee = z.infer<typeof selectEmployeeSchema>
+export type Employee = z.infer<typeof selectEmployeeSchema>
+export type NewEmployee = z.infer<typeof insertEmployeeSchema>
 
 export const insertJobSchema = createInsertSchema(job)
 export const selectJobSchema = createSelectSchema(job)
-export type Job = z.infer<typeof insertJobSchema>
-export type NewJob = z.infer<typeof selectJobSchema>
+export type Job = z.infer<typeof selectJobSchema>
+export type NewJob = z.infer<typeof insertJobSchema>

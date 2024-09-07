@@ -2,10 +2,7 @@
 
 import { Fragment, useState } from 'react'
 import Image from 'next/image'
-import { useRouter } from 'next/navigation'
 import { useQuery } from '@tanstack/react-query'
-import { NextPage } from 'next'
-import { useAccount } from 'wagmi'
 import { JobBox } from '~~/components/job/Job'
 import { BackButton } from '~~/components/ui/BackButton'
 import { Button } from '~~/components/ui/Button'
@@ -61,7 +58,7 @@ const JobDetails = ({ params }: { params: { slug: string } }) => {
     <>
       <BackButton href="/employee/offers" />
       <div className="flex flex-col gap-10">
-        <JobBox key={data?.job.name} job={data} hideArrow />
+        <JobBox key={data?.job.name} job={data.job} hideArrow />
         <div>
           {paragraphs.map((paragraph, index) => (
             <Fragment key={index}>

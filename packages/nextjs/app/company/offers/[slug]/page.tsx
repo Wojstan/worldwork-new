@@ -3,16 +3,23 @@
 import Link from 'next/link'
 import { NextPage } from 'next'
 import { Employee } from '~~/app/employee/[slug]/page'
-import { Job, JobBox } from '~~/components/job/Job'
+import { JobBox } from '~~/components/job/Job'
 import { ProfileBox } from '~~/components/job/Profile'
 import { BackButton } from '~~/components/ui/BackButton'
 import { Heading3 } from '~~/components/ui/Heading3'
+import { Job } from '~~/db/schema'
 
 const job: Job = {
   position: 'React developer',
-  primarySalary: 5000,
-  secondarySalary: 10000,
-  location: 'Berlin, Germany',
+  name: 'Worldcoin',
+  employer: '0x0',
+  arrayIndex: 0,
+  description: '',
+  stablecoinSalary: 0,
+  tokenSalary: 0,
+  startDate: null,
+  location: null,
+  endDate: null,
 }
 
 const employees: Partial<Employee>[] = [
@@ -40,12 +47,12 @@ const Jobs: NextPage = () => {
     <div>
       <BackButton href="/company/offers" />
 
-      <JobBox key={job.company} job={job} hideArrow className="bg-[#F3F4F6] rounded-3xl mt-2" />
+      <JobBox job={job} hideArrow className="bg-[#F3F4F6] rounded-3xl mt-2" />
 
       <Heading3 className="mt-8">Applicants ({employees.length})</Heading3>
 
       {employees.map((employee: Partial<Employee>, i) => (
-        <Link href={`/employee/${employee.id}`}>
+        <Link key={employee.id} href={`/employee/${employee.id}`}>
           <ProfileBox
             employee={employee as Employee}
             className={i % 2 ? 'bg-primary hover:bg-[#b99dde]' : 'bg-secondary hover:bg-[#fcd46e]'}

@@ -22,7 +22,7 @@ export function EmployeeOffersMobile({ data, isLoading }: Props) {
 
       <CurrentOffer job={data[offerCounter]} />
 
-      {isTinder && <Swiper swipe={setOfferCounter} />}
+      {isTinder && <Swiper length={data.length} swipe={setOfferCounter} />}
     </>
   )
 }

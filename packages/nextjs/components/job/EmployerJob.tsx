@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { Salary } from '../Salary'
-import { Job } from './Job'
 import { ArrowRightIcon } from '@heroicons/react/20/solid'
+import { Job } from '~~/db/schema'
 
 interface Props {
   job: Job
@@ -9,7 +9,7 @@ interface Props {
 }
 
 export function EmployerJobBox({ job, newLabel }: Props) {
-  const { position, primarySalary, secondarySalary, location } = job
+  const { position, stablecoinSalary: primarySalary, tokenSalary: secondarySalary, location } = job
 
   return (
     <Link href="/company/offers/1">

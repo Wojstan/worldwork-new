@@ -1,8 +1,8 @@
 import Image from 'next/image'
 
 interface Props {
-  primary: number | string
-  secondary?: number | string
+  primary: number | string | undefined
+  secondary?: number | string | undefined
 }
 
 export function Salary({ primary, secondary }: Props) {

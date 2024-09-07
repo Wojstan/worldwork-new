@@ -48,7 +48,7 @@ const Jobs: NextPage = () => {
 
       <div className="flex flex-col gap-3">
         {jobs.map((job) => (
-          <JobBoxLink key={job.image} job={job} href="/jobs/details" />
+          <JobBoxLink key={job.image} job={job} href="/employee/details" />
         ))}
       </div>
       <img className="absolute bottom-0 right-0" src="/jobs.svg" alt="" />

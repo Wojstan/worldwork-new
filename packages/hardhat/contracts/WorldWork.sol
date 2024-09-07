@@ -6,15 +6,26 @@ import { IWorldID } from "./interfaces/IWorldID.sol";
 
 contract WorldWork {
 
-	// struct VisitDetails {
-	// 	uint price;
-	// 	bool paid;
-	// 	address doctor;
-	// 	address patient;
-	// }
+	enum Stage {
+		Live,
+		Completed
+	}
+
+	struct Job {
+		uint price;
+		Stage stage;
+		address worker;
+		address[] applicants;
+	}
+
+	struct Employer {
+		address employer;
+		Job[] jobs;
+	}
 
 	mapping(address => bool) public workers;
 	mapping(address => bool) public employers;
+	mapping(address => Job) public jobs;
 
 	// mapping(string => VisitDetails) public visitdetails;
 
@@ -137,6 +148,28 @@ contract WorldWork {
 		employers[signal] = true;
 
 		emit EmployerRegistered(signal);
+	}
+
+	function addJobOffer(uint price) public {
+		require(employers[msg.sender], "Only employers can add job offers");
+		jobs[msg.sender] = Job(price, Stage.Live, address(0), new address[](0));
+	}
+
+	function applyForJob(address employer) public {
+		require(workers[msg.sender], "Only workers can apply for jobs");
+		require(employers[employer], "Only employers can have job applications");
+		jobs[employer].applicants.push(msg.sender);
+	}
+
+	function acceptWorker(address worker) public {
+		require(employers[msg.sender], "Only employers can accept workers");
+		require(workers[worker], "Only workers can be accepted");
+		jobs[msg.sender].worker = worker;
+	}
+
+	function completeJob() public {
+		require(employers[msg.sender], "Only employers can complete jobs");
+		jobs[msg.sender].stage = Stage.Completed;
 	}
 
 	// function finalizeVisit(

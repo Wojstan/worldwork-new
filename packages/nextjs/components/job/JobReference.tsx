@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import { CheckIcon } from '@heroicons/react/20/solid'
-import { Reference } from '~~/app/employee/profile/page'
+import { Reference } from '~~/app/employee/[slug]/page'
 
 interface Props {
   job: Reference

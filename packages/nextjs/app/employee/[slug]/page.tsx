@@ -1,8 +1,7 @@
-import Image from 'next/image'
 import { NextPage } from 'next'
 import { Job } from '~~/components/job/Job'
 import { JobReference } from '~~/components/job/JobReference'
-import { Button } from '~~/components/ui/Button'
+import { ProfileBox } from '~~/components/job/Profile'
 import { Heading3 } from '~~/components/ui/Heading3'
 
 export interface Reference extends Job {
@@ -11,7 +10,8 @@ export interface Reference extends Job {
   date: string
 }
 
-interface Employee {
+export interface Employee {
+  id?: number
   avatar: string
   name: string
   email: string
@@ -54,27 +54,14 @@ const employee: Employee = {
 }
 
 const Profile: NextPage = () => {
-  const { avatar, name, email, phone, description, experience } = employee
-
   return (
     <div className="mt-2">
-      <div className="bg-secondary rounded-2xl p-6 mb-8">
-        <div className="flex items-center justify-between mb-4 text-lg">
-          <div className="flex gap-8 items-center">
-            <Image alt="profile" src={avatar} width={90} height={90} />
-            <div className="font-bold">{name}</div>
-          </div>
-          <div>{email}</div>
-          <div className="font-bold">{phone}</div>
-        </div>
-
-        <div className="font-semibold text-gray-700 text-justify">{description}</div>
-      </div>
+      <ProfileBox className='bg-secondary' employee={employee} />
 
       <Heading3 className="mb-6">Experience:</Heading3>
 
       <ul className="">
-        {experience.map((job) => (
+        {employee.experience.map((job) => (
           <JobReference key={job.company} job={job} />
         ))}
       </ul>

@@ -24,15 +24,11 @@ const EmployerInfo: NextPage = () => {
     if (!address || !merkle_root || !nullifier_hash || !proof || !formData) {
       throw new Error('Invalid parameters')
     }
-    const validatedFields = insertEmployerSchema.safeParse({
+    const validatedFields = insertEmployerSchema.parse({
       name: formData.get('name'),
       email: formData.get('email'),
       wallet: address,
     })
-    if (validatedFields.error) {
-      throw validatedFields.error
-    }
-    await addEmployer(validatedFields.data)
 
     const unpackedProof = decodeAbiParameters([{ type: 'uint256[8]' }], proof as `0x${string}`)[0]
     await writeYourContractAsync(
@@ -41,7 +37,8 @@ const EmployerInfo: NextPage = () => {
         args: [address, BigInt(merkle_root), BigInt(nullifier_hash), unpackedProof],
       },
       {
-        onSuccess: () => {
+        onSuccess: async () => {
+          await addEmployer(validatedFields)
           router.push('/company/offers')
         },
       },

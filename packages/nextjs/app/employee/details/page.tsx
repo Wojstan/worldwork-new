@@ -3,45 +3,64 @@
 import { Fragment, useState } from 'react'
 import Image from 'next/image'
 import { NextPage } from 'next'
-import { Job, JobBox } from '~~/components/job/Job'
+import { JobBox } from '~~/components/job/Job'
 import { Button } from '~~/components/ui/Button'
 import { Heading2 } from '~~/components/ui/Heading2'
 import { Heading4 } from '~~/components/ui/Heading4'
 import { useScaffoldWriteContract } from '~~/hooks/scaffold-eth'
 import { useAccount } from 'wagmi'
+import { useQuery } from '@tanstack/react-query'
+import { getJob } from '~~/db/jobActions'
 
-const job: Job = {
-  image: '/worldcoin.png',
-  company: 'Worldcoin',
-  position: 'React developer',
-  primarySalary: 5000,
-  secondarySalary: 10000,
-  location: 'Berlin, Germany',
-}
+// const job = {
+//   image: '/worldcoin.png',
+//   company: 'Worldcoin',
+//   position: 'React developer',
+//   primarySalary: 5000,
+//   secondarySalary: 10000,
+//   location: 'Berlin, Germany',
+// }
 
-const jobDescription = `Our Technology team isn’t just one of the best in the industry. It's one of the best in the world. And we’re proud of it. It’s our driving force — our engine 🚀
-From building a new financial backend to creating an innovative app, there’s nothing they can’t do. Our Technology team isn’t here to fix legacy systems — it’s here to build world-class financial features from the ground up that'll be used by millions of people around the world 🌎
-We’re looking for a Blockchain Engineer that wants to change the world. If you like to work at a steady pace with no surprises, keep scrolling. If you want your work to change the global financial landscape, you might be just who we’re looking for. We have a minimalist approach to using external frameworks, with an emphasis on maintainability and fast turnaround with TDD, DDD, and Continuous Integration & Delivery.`
+// const jobDescription = `Our Technology team isn’t just one of the best in the industry. It's one of the best in the world. And we’re proud of it. It’s our driving force — our engine 🚀
+// From building a new financial backend to creating an innovative app, there’s nothing they can’t do. Our Technology team isn’t here to fix legacy systems — it’s here to build world-class financial features from the ground up that'll be used by millions of people around the world 🌎
+// We’re looking for a Blockchain Engineer that wants to change the world. If you like to work at a steady pace with no surprises, keep scrolling. If you want your work to change the global financial landscape, you might be just who we’re looking for. We have a minimalist approach to using external frameworks, with an emphasis on maintainability and fast turnaround with TDD, DDD, and Continuous Integration & Delivery.`
 
 const JobDetails: NextPage = () => {
+  const employer = '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'
+  const index = 0
+  const { data } = useQuery({
+    queryKey: ['getJob'],
+    queryFn: async () => {
+      const jobs = await getJob(employer, index)
+      return jobs?.[0]
+    },
+  })
+  const jobDescription = data?.job.description || ''
   const paragraphs = jobDescription.split('\n')
   const [isModalOpen, setIsModalOpen] = useState(false)
   const { writeContractAsync: writeYourContractAsync } = useScaffoldWriteContract('WorldWork')
   const { address } = useAccount()
 
-  const onSuccess = async () => {
+  const onApply = async () => {
+    if (data?.job.arrayIndex == undefined || data?.job.arrayIndex == null) {
+      console.log('no arrayIndex')
+      return
+    }
+
     await writeYourContractAsync(
       {
         functionName: 'applyForJob',
-        args: [address],
+        args: [address, BigInt(data?.job.arrayIndex)],
       },
     )
     setIsModalOpen(true)
   }
 
+  if (!data) return <div>Loading...</div>
+
   return (
     <div className="flex flex-col gap-10">
-      <JobBox key={job.image} job={job} hideArrow />
+      <JobBox key={data?.job.name} job={data} hideArrow />
       <div>
         {paragraphs.map((paragraph, index) => (
           <Fragment key={index}>
@@ -50,7 +69,7 @@ const JobDetails: NextPage = () => {
           </Fragment>
         ))}
       </div>
-      <Button onClick={() => setIsModalOpen(true)}>Apply for the job</Button>
+      <Button onClick={onApply}>Apply for the job</Button>
       {isModalOpen && <SuccessModal onClose={() => setIsModalOpen(false)} />}
     </div>
   )

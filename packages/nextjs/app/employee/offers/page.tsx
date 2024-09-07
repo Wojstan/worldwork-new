@@ -14,13 +14,17 @@ const Jobs: NextPage = () => {
       return await getJobOffers()
     },
   })
+
+  console.log(data)
   const isMobile = isMobileView()
 
   return (
     <div>
-
-      {isMobile ? <EmployeeOffersMobile /> : <EmployeeOffers data={data} isLoading={isLoading} />}
-      
+      {isMobile ? (
+        <EmployeeOffersMobile data={data} isLoading={isLoading} />
+      ) : (
+        <EmployeeOffers data={data} isLoading={isLoading} />
+      )}
     </div>
   )
 }

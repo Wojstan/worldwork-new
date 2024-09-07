@@ -1,11 +1,11 @@
 import { useContext, useState } from 'react'
 import { TinderContext } from '../ScaffoldEthAppWithProviders'
-import { Job } from './Job'
 import { Swiper } from './Swiper'
 import { TinderSwitch } from './TinderSwitch'
+import { Employee, Job } from '~~/db/schema'
 
 interface Props {
-  data: Job[]
+  data: { job: Job; employee: Employee | null }[]
   isLoading: boolean
 }
 
@@ -27,6 +27,6 @@ export function EmployeeOffersMobile({ data, isLoading }: Props) {
   )
 }
 
-function CurrentOffer({ job }: { job: Job }) {
+function CurrentOffer({ job }: { job: { job: Job; employee: Employee | null } }) {
   return <div>{job.job.name}</div>
 }

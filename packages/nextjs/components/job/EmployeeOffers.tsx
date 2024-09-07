@@ -1,0 +1,27 @@
+import { Heading3 } from '../ui/Heading3'
+import { Loader } from '../ui/Loader'
+import { Job, JobBoxLink } from './Job'
+
+interface Props {
+  data: Job[]
+  isLoading: boolean
+}
+
+export function EmployeeOffers({ data, isLoading }: Props) {
+  return (
+    <>
+      <Heading3 className="mt-8">Available jobs:</Heading3>
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <div className="flex flex-col gap-3">
+          {data?.map((job) => (
+            <JobBoxLink key={job.job.name} job={job} href={`/employee/offers/${job.job.arrayIndex}`} />
+          ))}
+        </div>
+      )}
+
+      <img className="absolute bottom-0 right-0" src="/jobs.svg" alt="" />
+    </>
+  )
+}

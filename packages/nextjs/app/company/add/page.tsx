@@ -3,12 +3,11 @@
 import { useState } from 'react'
 import Image from 'next/image'
 import { NextPage } from 'next'
-import { BackButton } from '~~/components/ui/BackButton'
 import { Button } from '~~/components/ui/Button'
 import { Heading1 } from '~~/components/ui/Heading1'
 import { Heading3 } from '~~/components/ui/Heading3'
 import { Input } from '~~/components/ui/Input'
-import { NewJob, insertJobSchema } from '~~/db/schema'
+import { insertJobSchema } from '~~/db/schema'
 import { useScaffoldReadContract, useScaffoldWriteContract } from '~~/hooks/scaffold-eth'
 import { addJobOffer } from '~~/db/jobActions'
 import { useAccount } from 'wagmi'
@@ -27,27 +26,26 @@ const AddJob: NextPage = () => {
     if (!formData) {
       throw new Error('Invalid parameters')
     }
-    const validatedFields = insertJobSchema.parse({
-      description: formData.get('description'),
-      employer: address,
-      arrayIndex: data?.length,
-      startDate: formData.get('startDate'),
-      endDate: formData.get('endDate'),
-    })
-
     const stablecoinValue = formData.get('stablecoinValue')?.toString()
     const tokenValue = formData.get('tokenValue')?.toString()
-    if (!stablecoinValue || !tokenValue) {
-      throw new Error('Invalid parameters')
-    }
+
+    const validatedFields = insertJobSchema.parse({
+      position: formData.get('position'),
+      description: formData.get('description'),
+      employer: address,
+      arrayIndex: 3,
+      stablecoinSalary: parseInt(stablecoinValue || '0'), 
+      tokenSalary: parseInt(tokenValue || '0'),
+      location: 'Berlin, Germany',
+    })
 
     await writeYourContractAsync(
       {
         functionName: 'addJobOffer',
-        args: [BigInt(stablecoinValue), BigInt(tokenValue)],
+        args: [BigInt(stablecoinValue || 0), BigInt(tokenValue || 0)],
       },
     )
-    await addJobOffer(validatedFields as NewJob)
+    await addJobOffer(validatedFields)
   }
 
   return (

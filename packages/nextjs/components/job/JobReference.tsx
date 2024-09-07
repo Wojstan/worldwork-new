@@ -1,23 +1,29 @@
+"use server"
+
 import Image from 'next/image'
 import { CheckIcon } from '@heroicons/react/20/solid'
-import { Reference } from '~~/app/employee/[slug]/page'
+import { companies } from '~~/constants/company'
+import { getEmployer } from '~~/db/employerActions'
+import { Job } from '~~/db/schema'
 
 interface Props {
-  job: Reference
+  job: Job
 }
 
-export function JobReference({ job }: Props) {
-  const { image, company, position, date, description } = job
+export async function JobReference({ job }: Props) {
+  const { employer, position, startDate, endDate, description } = job
+  const employerData = await getEmployer(employer)
+  const employerName = employerData[0]?.name
 
   return (
     <li className="flex flex-col gap-4 mb-8  pb-8 [&:not(:last-child)]:border-b">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-6 w-36">
-          <Image alt="company" src={image as string} width={90} height={90} />
-          <div className="font-bold">{company}</div>
+          <Image alt="company" src={companies[employerName]} width={90} height={90} />
+          <div className="font-bold">{employerName}</div>
         </div>
         <div>{position}</div>
-        <div className="font-bold">{date}</div>
+        <div className="font-bold">{startDate}</div>
       </div>
       <div className="text-gray-700 font-semibold">Reference:</div>
 

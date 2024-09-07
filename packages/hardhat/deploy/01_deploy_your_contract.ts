@@ -32,8 +32,8 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
   const { deploy } = hre.deployments;
 
 
-  if (hre.network.name == 'arbitrumSepolia'){
-    const worldId =  await deploy("WorldId", {
+  if (hre.network.name == 'arbitrumSepolia') {
+    const worldId = await deploy("WorldId", {
       from: deployer,
       // Contract constructor arguments
       log: true,
@@ -41,8 +41,8 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
       // automatically mining the contract deployment transaction. There is no effect on live networks.
       autoMine: true,
     });
-  
-    if (!worldId.receipt?.contractAddress){
+
+    if (!worldId.receipt?.contractAddress) {
       throw new Error('WorldId contract deployment failed')
     }
 
@@ -56,7 +56,7 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
     log: true,
     args: [
       worldRouterAddresses[hre.network.name],
-      'app_staging_47391015481f14b9ef820719cb4383a7',
+      'app_staging_3aeacead9480597498aa72bc01889e92',
       'regiter-work-user',
     ],
     autoMine: true,

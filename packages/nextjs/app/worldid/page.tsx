@@ -28,7 +28,7 @@ const WorldId: NextPage = () => {
   return (
     <>
       <IDKitWidget
-        app_id="app_staging_47391015481f14b9ef820719cb4383a7" // obtained from the Developer Portal
+        app_id="app_staging_3aeacead9480597498aa72bc01889e92" // obtained from the Developer Portal
         action="register-user" // obtained from the Developer Portal
         onSuccess={onSuccess} // callback when the modal is closed
         signal={connectedAddress} // the signal to be verified

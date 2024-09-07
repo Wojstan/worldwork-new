@@ -7,7 +7,7 @@ import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
 const deployedContracts = {
   31337: {
     WorldId: {
-      address: "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+      address: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
       abi: [
         {
           inputs: [
@@ -53,7 +53,7 @@ const deployedContracts = {
       },
     },
     WorldWork: {
-      address: "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
+      address: "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
       abi: [
         {
           inputs: [
@@ -114,8 +114,46 @@ const deployedContracts = {
               name: "worker",
               type: "address",
             },
+            {
+              internalType: "uint256",
+              name: "index",
+              type: "uint256",
+            },
           ],
           name: "acceptWorker",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [],
+          name: "addDefaultJobOffer",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "adr",
+              type: "address",
+            },
+          ],
+          name: "addDefaultValuesEmployer",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "adr",
+              type: "address",
+            },
+          ],
+          name: "addDefaultValuesWorker",
           outputs: [],
           stateMutability: "nonpayable",
           type: "function",
@@ -145,6 +183,11 @@ const deployedContracts = {
               name: "employer",
               type: "address",
             },
+            {
+              internalType: "uint256",
+              name: "index",
+              type: "uint256",
+            },
           ],
           name: "applyForJob",
           outputs: [],
@@ -152,8 +195,14 @@ const deployedContracts = {
           type: "function",
         },
         {
-          inputs: [],
-          name: "completeJob",
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "index",
+              type: "uint256",
+            },
+          ],
+          name: "deactivateJob",
           outputs: [],
           stateMutability: "nonpayable",
           type: "function",
@@ -181,8 +230,88 @@ const deployedContracts = {
           inputs: [
             {
               internalType: "address",
+              name: "employer",
+              type: "address",
+            },
+          ],
+          name: "getJobs",
+          outputs: [
+            {
+              components: [
+                {
+                  internalType: "address",
+                  name: "employer",
+                  type: "address",
+                },
+                {
+                  components: [
+                    {
+                      internalType: "uint256",
+                      name: "amount",
+                      type: "uint256",
+                    },
+                    {
+                      internalType: "contract IERC20",
+                      name: "token",
+                      type: "address",
+                    },
+                  ],
+                  internalType: "struct WorldWork.Salary",
+                  name: "stablecoinSalary",
+                  type: "tuple",
+                },
+                {
+                  components: [
+                    {
+                      internalType: "uint256",
+                      name: "amount",
+                      type: "uint256",
+                    },
+                    {
+                      internalType: "contract IERC20",
+                      name: "token",
+                      type: "address",
+                    },
+                  ],
+                  internalType: "struct WorldWork.Salary",
+                  name: "tokenSalary",
+                  type: "tuple",
+                },
+                {
+                  internalType: "enum WorldWork.Stage",
+                  name: "stage",
+                  type: "uint8",
+                },
+                {
+                  internalType: "address",
+                  name: "worker",
+                  type: "address",
+                },
+                {
+                  internalType: "address[]",
+                  name: "applicants",
+                  type: "address[]",
+                },
+              ],
+              internalType: "struct WorldWork.Job[]",
+              name: "",
+              type: "tuple[]",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
               name: "",
               type: "address",
+            },
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
             },
           ],
           name: "jobs",

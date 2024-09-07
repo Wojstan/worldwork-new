@@ -11,13 +11,22 @@ interface Props {
 
 export function EmployeeOffersMobile({ data, isLoading }: Props) {
   const { isTinder } = useContext(TinderContext)
+
+  const [offerCounter, setOfferCounter] = useState(0)
+
   return (
     <>
       <div className="px-3">
         <TinderSwitch />
       </div>
 
-      {isTinder && <Swiper />}
+      <CurrentOffer job={data[offerCounter]} />
+
+      {isTinder && <Swiper swipe={setOfferCounter} />}
     </>
   )
+}
+
+function CurrentOffer({ job }: { job: Job }) {
+  return <div>{job.job.name}</div>
 }

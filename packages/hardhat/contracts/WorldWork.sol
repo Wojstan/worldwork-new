@@ -3,29 +3,31 @@ pragma solidity >=0.8.0 <0.9.0;
 
 import { ByteHasher } from "./helpers/ByteHasher.sol";
 import { IWorldID } from "./interfaces/IWorldID.sol";
+import { IERC20 } from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 contract WorldWork {
-
 	enum Stage {
 		Live,
 		Completed
 	}
 
 	struct Job {
-		uint price;
+		address employer;
+		Salary stablecoinSalary;
+		Salary tokenSalary;
 		Stage stage;
 		address worker;
 		address[] applicants;
 	}
 
-	struct Employer {
-		address employer;
-		Job[] jobs;
+	struct Salary {
+		uint amount;
+		IERC20 token;
 	}
 
 	mapping(address => bool) public workers;
 	mapping(address => bool) public employers;
-	mapping(address => Job) public jobs;
+	mapping(address => Job[]) public jobs;
 
 	// mapping(string => VisitDetails) public visitdetails;
 
@@ -150,26 +152,38 @@ contract WorldWork {
 		emit EmployerRegistered(signal);
 	}
 
-	function addJobOffer(uint price) public {
+	function addJobOffer(uint stablecoinSalary, uint tokenSalary) public {
 		require(employers[msg.sender], "Only employers can add job offers");
-		jobs[msg.sender] = Job(price, Stage.Live, address(0), new address[](0));
+		jobs[msg.sender].push(
+			Job(
+				msg.sender,
+				Salary(stablecoinSalary, IERC20(address(0))),
+				Salary(tokenSalary, IERC20(address(0))),
+				Stage.Live,
+				address(0),
+				new address[](0)
+			)
+		);
 	}
 
-	function applyForJob(address employer) public {
+	function applyForJob(address employer, uint index) public {
 		require(workers[msg.sender], "Only workers can apply for jobs");
-		require(employers[employer], "Only employers can have job applications");
-		jobs[employer].applicants.push(msg.sender);
+		require(
+			employers[employer],
+			"Only employers can have job applications"
+		);
+		jobs[employer][index].applicants.push(msg.sender);
 	}
 
-	function acceptWorker(address worker) public {
+	function acceptWorker(address worker, uint index) public {
 		require(employers[msg.sender], "Only employers can accept workers");
 		require(workers[worker], "Only workers can be accepted");
-		jobs[msg.sender].worker = worker;
+		jobs[msg.sender][index].worker = worker;
 	}
 
-	function completeJob() public {
+	function deactivateJob(uint index) public {
 		require(employers[msg.sender], "Only employers can complete jobs");
-		jobs[msg.sender].stage = Stage.Completed;
+		jobs[msg.sender][index].stage = Stage.Completed;
 	}
 
 	// function finalizeVisit(
@@ -180,7 +194,7 @@ contract WorldWork {
 	// ) public {
 	// 	require(doctors[doctor], "Only doctors can add documents");
 	// 	require(patients[patient], "Only patients can have documents");
-    //     require(doctorsPermissions[doctor][patient], "Doctor does not have permission to access patient's profile");
+	//     require(doctorsPermissions[doctor][patient], "Doctor does not have permission to access patient's profile");
 	// 	visitdetails[visitCid] = VisitDetails(price, false, doctor, patient);
 	// 	emit VisitFinalized(patient, doctor, visitCid, price);
 	// }

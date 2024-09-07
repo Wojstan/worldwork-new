@@ -1,6 +1,6 @@
 "use server"
 
-import { employee, job, NewJob } from "~~/db/schema";
+import { employer,employee, job, NewJob } from "~~/db/schema";
 import { db } from "~~/db/drizzle";
 import { eq, and } from 'drizzle-orm'
 
@@ -10,7 +10,7 @@ export const addJobOffer = (newJob: NewJob) => {
 }
 
 export const getJobOffers = () => {
-  return db.select().from(job).leftJoin(employee, eq(job.employer, employee.wallet))
+  return db.select().from(job).leftJoin(employer, eq(job.employer, employer.wallet))
 }
 
 export const getJob = (employer: string, index: number) => {

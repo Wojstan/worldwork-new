@@ -20,3 +20,7 @@ export const getJob = (employer: string, index: number) => {
 export const getCompanyOffers = (employer: string) => {
   return db.select().from(job).where(eq(job.employer, employer))
 }
+
+export const getEmployeeHistory = (employee: string) => {
+  return db.select().from(job).where(eq(job.employee, employee))
+}

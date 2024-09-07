@@ -1,8 +1,9 @@
-import { NextPage } from 'next'
-import { Job } from '~~/components/job/Job'
 import { JobReference } from '~~/components/job/JobReference'
 import { ProfileBox } from '~~/components/job/Profile'
 import { Heading3 } from '~~/components/ui/Heading3'
+import { getEmployee } from '~~/db/employeeActions'
+import { getEmployeeHistory } from '~~/db/jobActions'
+import { Job } from '~~/db/schema'
 
 export interface Reference extends Job {
   description: string
@@ -20,49 +21,20 @@ export interface Employee {
   experience: Reference[]
 }
 
-const employee: Employee = {
-  avatar: '/doe.png',
-  name: 'john.eth',
-  email: 'john@email.com',
-  phone: '+ 23 000 344 000',
-  description:
-    'A passionate and detail-oriented developer with experience in building dynamic and responsive web applications. Proficient in front-end and back-end technologies, including JavaScript, HTML, CSS, React, and Node.js, with a strong focus on creating clean, efficient, and maintainable code. Skilled in collaborating with teams to deliver high-quality projects on time and constantly exploring new tools and techniques to stay at the cutting edge of development. Dedicated to problem-solving, continuous learning, and improving user experience through innovative solutions.',
-  experience: [
-    {
-      date: '02.2021 - 07.2024',
-      position: 'UX/UI Designer',
-      primarySalary: 5000,
-      secondarySalary: 10000,
-      location: 'Berlin, Germany',
-      image: '/worldcoin.png',
-      company: 'Worldcoin',
-      description: `He not only delivered quality code but also contributed to improving our development processes through innovative ideas and a collaborative approach. [Developer's Name] was a go-to person for troubleshooting and consistently exceeded expectations, always delivering on time and helping others when needed.`,
-      signed: true,
-    },
-    {
-      date: '02.2021 - 07.2024',
-      position: 'React Developer',
-      primarySalary: 5000,
-      secondarySalary: 10000,
-      location: 'Warsaw, Poland',
-      image: '/ens.png',
-      company: 'ENS',
-      description: 'Great developer!',
-      signed: true,
-    },
-  ],
-}
+const Profile = async ({ params }: { params: { slug: string } }) => {
+  const employeeAddress = params.slug
+  const history = await getEmployeeHistory(employeeAddress)
+  const employee = await getEmployee(employeeAddress)
 
-const Profile: NextPage = () => {
   return (
     <div className="mt-2">
-      <ProfileBox className='bg-secondary' employee={employee} />
+      <ProfileBox className="bg-secondary" name={employee[0]?.name ?? ''} />
 
       <Heading3 className="mb-6">Experience:</Heading3>
 
       <ul className="">
-        {employee.experience.map((job) => (
-          <JobReference key={job.company} job={job} />
+        {history?.map((job) => (
+          <JobReference key={`${job.employer}${job.arrayIndex}`} job={job} />
         ))}
       </ul>
 

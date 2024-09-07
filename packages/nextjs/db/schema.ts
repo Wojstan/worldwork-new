@@ -21,6 +21,7 @@ export const job = pgTable('job', {
   startDate: text('startDate'),
   endDate: text('endDate'),
   location: text('location'),
+  position: text('position'),
   stablecoinSalary: integer('stablecoinSalary').notNull().default(0),
   tokenSalary: integer('tokenSalary').notNull().default(0),
 }, (table) => ({

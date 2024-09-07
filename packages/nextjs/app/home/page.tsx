@@ -19,7 +19,7 @@ const Home: NextPage = () => {
 
   useEffect(() => {
     if (clickedConnect && isConnected) {
-      router.push('/employee')
+      router.push('/employee/offers')
     }
   }, [clickedConnect, isConnected, router]);
 

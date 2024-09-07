@@ -1,8 +1,10 @@
 'use client'
 
+import Link from 'next/link'
 import { NextPage } from 'next'
 import { EmployerJobBox } from '~~/components/job/EmployerJob'
 import { Job } from '~~/components/job/Job'
+import { Button } from '~~/components/ui/Button'
 import { Heading1 } from '~~/components/ui/Heading1'
 import { Heading3 } from '~~/components/ui/Heading3'
 
@@ -25,12 +27,18 @@ const Jobs: NextPage = () => {
   return (
     <div>
       <Heading1>Are you looking for an employee? :)</Heading1>
-      <Heading3 className="mt-8">Your company offers:</Heading3>
+      <Heading3 className="my-8">Your company offers:</Heading3>
 
       <div className="flex flex-col gap-3">
-        {jobs.map((job) => (
-          <EmployerJobBox key={job.company} job={job} />
+        {jobs.map((job, i) => (
+          <EmployerJobBox newLabel={i == 0} key={job.company} job={job} />
         ))}
+      </div>
+
+      <div className="flex justify-center p-4">
+        <Link href="/company/add">
+          <Button>Add new job offer</Button>
+        </Link>
       </div>
 
       <img className="absolute bottom-0 right-0" src="/company.svg" alt="" />

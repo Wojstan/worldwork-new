@@ -14,17 +14,16 @@ export interface Job {
 }
 
 interface JobBoxProps {
+  className?: string
   job: Job
   hideArrow?: boolean
 }
 
-export function JobBox({ job, hideArrow = false }: JobBoxProps) {
+export function JobBox({ job, hideArrow = false, className }: JobBoxProps) {
   const { image, company, position, primarySalary, secondarySalary, location } = job
 
   return (
-    <div
-      className={`h-28 bg-white z-10 flex items-center justify-between px-6 transition `}
-    >
+    <div className={`h-28 bg-white z-10 flex items-center justify-between px-6 transition ${className}`}>
       {image && <Image alt="Logo" src={image} width={80} height={80} />}
       {company && <Heading3 className="mb-0 w-36">{company}</Heading3>}
 

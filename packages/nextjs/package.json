@@ -16,6 +16,7 @@
     "db:migration:push": "npx drizzle-kit migrate"
   },
   "dependencies": {
+    "@ensdomains/ensjs": "4.0.0",
     "@heroicons/react": "^2.0.11",
     "@neondatabase/serverless": "^0.9.5",
     "@rainbow-me/rainbowkit": "2.1.2",

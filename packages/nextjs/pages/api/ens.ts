@@ -1,0 +1,57 @@
+import { addEnsContracts } from '@ensdomains/ensjs'
+import { getPrice } from '@ensdomains/ensjs/public'
+import { RegistrationParameters, randomSecret } from '@ensdomains/ensjs/utils'
+import { commitName, registerName } from '@ensdomains/ensjs/wallet'
+import { NextApiRequest, NextApiResponse } from 'next'
+import { Hex, createClient, http, publicActions, walletActions } from 'viem'
+import { privateKeyToAccount } from 'viem/accounts'
+import { sepolia } from 'viem/chains'
+
+const account = privateKeyToAccount(process.env.BACKEND_SENDER_PRIVATE_KEY as Hex)
+
+const client = createClient({
+  account,
+  chain: addEnsContracts(sepolia),
+  transport: http(`https://sepolia.infura.io/v3/${process.env.NEXT_PUBLIC_INFURA_KEY}`),
+  cacheTime: 0,
+})
+  .extend(publicActions)
+  .extend(walletActions)
+
+const oneYear = 60 * 60 * 24 * 365
+
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  const body = JSON.parse(req.body)
+  const nickname = body.nickname
+  const address = body.address
+  const nicknameWithExtension = `${nickname}.eth`
+
+  const registerArgs = {
+    name: nicknameWithExtension,
+    owner: address,
+    duration: oneYear,
+    secret: randomSecret(),
+    records: {
+      coins: [{ coin: 60, value: address }],
+    },
+    resolverAddress: '0x8FADE66B79cC9f707aB26799354482EB93a5B7dD', // Default public resolver, find it for your chain here https://docs.ens.domains/learn/deployments
+  } satisfies RegistrationParameters
+
+  const commitmentHash = await commitName(client, registerArgs)
+  await client.waitForTransactionReceipt({ hash: commitmentHash }) // wait for the first transaction to succeed
+  console.log('waiting')
+  await new Promise((resolve) => setTimeout(resolve, 65_000)) // wait for commitment to be valid
+  console.log('finished waiting 65 seconds')
+
+  const { base, premium } = await getPrice(client, {
+    nameOrNames: nicknameWithExtension,
+    duration: oneYear,
+  })
+
+  const value = ((base + premium) * 110n) / 100n // add 10% to the price for buffer
+  const hash = await registerName(client, { ...registerArgs, value })
+
+  await client.waitForTransactionReceipt({ hash })
+  console.log('finished registering ENS')
+  res.status(200).json({})
+}

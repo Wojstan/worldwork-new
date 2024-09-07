@@ -6,13 +6,15 @@ import { Job } from '~~/db/schema'
 interface Props {
   job: Job
   newLabel?: boolean
+  index: number
+  numberOfApplicants: number | undefined
 }
 
-export function EmployerJobBox({ job, newLabel }: Props) {
+export function EmployerJobBox({ job, newLabel, index, numberOfApplicants }: Props) {
   const { position, stablecoinSalary: primarySalary, tokenSalary: secondarySalary, location } = job
-
+  
   return (
-    <Link href="/company/offers/1">
+    <Link href={`/company/offers/${index}`}>
       <div className="border border-black h-28 rounded-xl bg-white z-50 flex items-center justify-between px-6 hover:bg-[#F8F2FF] hover:border-[#CFAAFF] transition cursor-pointer relative">
         <div>{position}</div>
 
@@ -27,7 +29,7 @@ export function EmployerJobBox({ job, newLabel }: Props) {
         )}
 
         <div className="cursor-pointer flex items-center gap-1 text-primary font-bold">
-          2 applicants
+          {numberOfApplicants || 0} applicants
           <ArrowRightIcon className="h-4 w-4" />
         </div>
       </div>

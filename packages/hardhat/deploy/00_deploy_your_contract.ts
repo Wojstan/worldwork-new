@@ -62,9 +62,11 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
   const transactionResponse2 = await worldWork.addDefaultValuesEmployer('0x70997970C51812dc3A010C7d01b50e0d17dc79C8');
   await transactionResponse2.wait();
 
-  const transactionResponse3 = await worldWork.addDefaultJobOffer();
+  const transactionResponse3 = await worldWork.addDefaultJobOffer('0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266');
   await transactionResponse3.wait();
-  console.log('deployer', deployer)
+
+  const transactionResponse35 = await worldWork.addDefaultJobOfferWithWorker('0x70997970C51812dc3A010C7d01b50e0d17dc79C8', '0x9965507D1a55bcC2695C58ba16FB37d819B0A4dc');
+  await transactionResponse35.wait();
 
   const transactionResponse4 = await worldWork.addDefaultValuesWorker('0x90F79bf6EB2c4f870365E785982E1f101E93b906');
   await transactionResponse4.wait();
@@ -73,7 +75,6 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
   await transactionResponse5.wait();
 
   const unnamed = await hre.getUnnamedAccounts();
-  console.log('abc', unnamed)
 };
 
 export default deployYourContract;

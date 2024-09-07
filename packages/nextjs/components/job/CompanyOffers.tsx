@@ -8,6 +8,7 @@ import { Heading3 } from '~~/components/ui/Heading3'
 import { useQuery } from '@tanstack/react-query'
 import { getCompanyOffers } from '~~/db/jobActions'
 import { useAccount } from 'wagmi'
+import { useScaffoldReadContract } from '~~/hooks/scaffold-eth'
 
 // const jobs: Job[] = [
 //   {
@@ -36,15 +37,24 @@ export function CompanyOffers() {
     enabled: !!address,
   })
 
+  const { data: dataFromContract } = useScaffoldReadContract({
+    contractName: 'WorldWork',
+    functionName: 'getJobs',
+    args: [address]
+  })
+
   return (
     <div>
       <Heading1>Company data</Heading1>
       <Heading3 className='mb-8'>Your company offers:</Heading3>
 
       <div className="flex flex-col gap-3">
-        {data?.map((job, i) => (
-          <EmployerJobBox newLabel={i == 0} key={job.arrayIndex} job={job} />
-        ))}
+        {data?.map((job, i) => {
+          const contractElement = dataFromContract?.find((element, i) => element.employer == job.employer && i == job.arrayIndex)
+          return (
+            <EmployerJobBox newLabel={i == 0} key={job.arrayIndex} job={job} index={i} numberOfApplicants={contractElement?.applicants.length}/>
+          )
+        })}
       </div>
 
       <div className="flex justify-center p-4">

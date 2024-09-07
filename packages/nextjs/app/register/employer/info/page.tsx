@@ -6,8 +6,9 @@ import { decodeAbiParameters } from 'viem'
 import { Button } from '~~/components/ui/Button'
 import { Heading1 } from '~~/components/ui/Heading1'
 import { Input } from '~~/components/ui/Input'
-import { addEmployer, insertEmployerSchema } from '~~/db/employerActions'
+import { addEmployer } from '~~/db/employerActions'
 import { useScaffoldWriteContract } from '~~/hooks/scaffold-eth'
+import { insertEmployerSchema } from "~~/db/schema";
 
 const EmployerInfo: NextPage = () => {
   const searchParams = useSearchParams()

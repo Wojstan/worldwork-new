@@ -1,33 +1,52 @@
 'use client'
 
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { useConnectModal } from '@rainbow-me/rainbowkit'
 import { NextPage } from 'next'
+import { useAccount } from 'wagmi'
 import { ArrowRightIcon } from '@heroicons/react/24/outline'
 import { Heading1 } from '~~/components/ui/Heading1'
 import { Heading3 } from '~~/components/ui/Heading3'
-import { useEffect, useState } from 'react'
-import { useAccount } from 'wagmi'
-import { useRouter } from "next/navigation";
+import { useScaffoldReadContract } from '~~/hooks/scaffold-eth'
 
 const Home: NextPage = () => {
   const { openConnectModal } = useConnectModal()
-  const { isConnected } = useAccount()
+  const { isConnected, address } = useAccount()
   const router = useRouter()
+
+  const { data: isEmployee, isLoading: isLoadingEmployee } = useScaffoldReadContract({
+    contractName: 'WorldWork',
+    functionName: 'workers',
+    args: [address],
+  })
+
+  const { data: isEmployer, isLoading: isLoadingEmployer } = useScaffoldReadContract({
+    contractName: 'WorldWork',
+    functionName: 'employers',
+    args: [address],
+  })
 
   const [clickedConnect, setClickedConnect] = useState(false)
 
-  useEffect(() => {
-    if (clickedConnect && isConnected) {
+  const redirect = () => {
+    if (isEmployee) {
       router.push('/employee/offers')
     }
-  }, [clickedConnect, isConnected, router]);
+    if (isEmployer) {
+      router.push('/company/offers')
+    }
+  }
+
+  useEffect(() => {
+    if (clickedConnect && isConnected && !isLoadingEmployee && !isLoadingEmployer) {
+      redirect()
+    }
+  }, [clickedConnect, isConnected, router, isEmployee, isEmployer, isLoadingEmployee, isLoadingEmployer])
 
   const onLogin = () => {
-    if (isConnected) {
-      router.push('/employee/offers')
-      return
-    }
+    redirect()
     openConnectModal?.()
     setClickedConnect(true)
   }

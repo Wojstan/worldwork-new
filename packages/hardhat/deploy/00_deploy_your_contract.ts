@@ -20,13 +20,15 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
     You can run the `yarn account` command to check your balance in every network.
   */
 
-  if(hre.network.name != 'localhost'){
+
+
+  if (hre.network.name != 'localhost') {
     return
   }
   const { deployer } = await hre.getNamedAccounts();
   const { deploy } = hre.deployments;
 
-  const worldId =  await deploy("WorldId", {
+  const worldId = await deploy("WorldId", {
     from: deployer,
     // Contract constructor arguments
     log: true,
@@ -35,17 +37,17 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
     autoMine: true,
   });
 
-  if (!worldId.receipt){
+  if (!worldId.receipt) {
     throw new Error('WorldId contract deployment failed')
   }
-  
-  await deploy("WorldWork", {
+
+  const worldWorkDeployment = await deploy("WorldWork", {
     from: deployer,
     // Contract constructor arguments
     log: true,
     args: [
       worldId.receipt.contractAddress,
-      'app_staging_47391015481f14b9ef820719cb4383a7',
+      'app_staging_3aeacead9480597498aa72bc01889e92',
       'regiter-work-user',
     ],
     // autoMine: can be passed to the deploy function to make the deployment process faster on local networks by
@@ -53,7 +55,19 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
     autoMine: true,
   });
 
+  const worldWork = await hre.ethers.getContractAt("WorldWork", worldWorkDeployment.address);
+  const transactionResponse1 = await worldWork.addDefaultValuesEmployer('0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266');
+  await transactionResponse1.wait();
 
+  const transactionResponse2 = await worldWork.addDefaultValuesEmployer('0x70997970C51812dc3A010C7d01b50e0d17dc79C8');
+  await transactionResponse2.wait();
+
+  const transactionResponse3 = await worldWork.addDefaultJobOffer();
+  await transactionResponse3.wait();
+  console.log('deployer', deployer)
+
+  const unnamed = await hre.getUnnamedAccounts();
+  console.log('abc', unnamed)
 };
 
 export default deployYourContract;

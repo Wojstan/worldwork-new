@@ -2,15 +2,18 @@
 
 import { Fragment, useState } from 'react'
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
+import { useQuery } from '@tanstack/react-query'
 import { NextPage } from 'next'
+import { useAccount } from 'wagmi'
 import { JobBox } from '~~/components/job/Job'
+import { BackButton } from '~~/components/ui/BackButton'
 import { Button } from '~~/components/ui/Button'
 import { Heading2 } from '~~/components/ui/Heading2'
 import { Heading4 } from '~~/components/ui/Heading4'
-import { useScaffoldWriteContract } from '~~/hooks/scaffold-eth'
-import { useAccount } from 'wagmi'
-import { useQuery } from '@tanstack/react-query'
+import { Loader } from '~~/components/ui/Loader'
 import { getJob } from '~~/db/jobActions'
+import { useScaffoldWriteContract } from '~~/hooks/scaffold-eth'
 
 // const job = {
 //   image: '/worldcoin.png',
@@ -25,13 +28,12 @@ import { getJob } from '~~/db/jobActions'
 // From building a new financial backend to creating an innovative app, there’s nothing they can’t do. Our Technology team isn’t here to fix legacy systems — it’s here to build world-class financial features from the ground up that'll be used by millions of people around the world 🌎
 // We’re looking for a Blockchain Engineer that wants to change the world. If you like to work at a steady pace with no surprises, keep scrolling. If you want your work to change the global financial landscape, you might be just who we’re looking for. We have a minimalist approach to using external frameworks, with an emphasis on maintainability and fast turnaround with TDD, DDD, and Continuous Integration & Delivery.`
 
-const JobDetails: NextPage = () => {
+const JobDetails = ({ params }: { params: { slug: string } }) => {
   const employer = '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'
-  const index = 0
-  const { data } = useQuery({
+  const { data, isFetching } = useQuery({
     queryKey: ['getJob'],
     queryFn: async () => {
-      const jobs = await getJob(employer, index)
+      const jobs = await getJob(employer, Number(params.slug))
       return jobs?.[0]
     },
   })
@@ -39,7 +41,6 @@ const JobDetails: NextPage = () => {
   const paragraphs = jobDescription.split('\n')
   const [isModalOpen, setIsModalOpen] = useState(false)
   const { writeContractAsync: writeYourContractAsync } = useScaffoldWriteContract('WorldWork')
-  const { address } = useAccount()
 
   const onApply = async () => {
     if (data?.job.arrayIndex == undefined || data?.job.arrayIndex == null) {
@@ -47,31 +48,32 @@ const JobDetails: NextPage = () => {
       return
     }
 
-    await writeYourContractAsync(
-      {
-        functionName: 'applyForJob',
-        args: [address, BigInt(data?.job.arrayIndex)],
-      },
-    )
+    await writeYourContractAsync({
+      functionName: 'applyForJob',
+      args: [data.job.employer, BigInt(data?.job.arrayIndex)],
+    })
     setIsModalOpen(true)
   }
 
-  if (!data) return <div>Loading...</div>
+  if (isFetching || !data) return <Loader />
 
   return (
-    <div className="flex flex-col gap-10">
-      <JobBox key={data?.job.name} job={data} hideArrow />
-      <div>
-        {paragraphs.map((paragraph, index) => (
-          <Fragment key={index}>
-            <span>{paragraph}</span>
-            <br /> <br />
-          </Fragment>
-        ))}
+    <>
+      <BackButton href="/employee/offers" />
+      <div className="flex flex-col gap-10">
+        <JobBox key={data?.job.name} job={data} hideArrow />
+        <div>
+          {paragraphs.map((paragraph, index) => (
+            <Fragment key={index}>
+              <span>{paragraph}</span>
+              <br /> <br />
+            </Fragment>
+          ))}
+        </div>
+        <Button onClick={onApply}>Apply for the job</Button>
+        {isModalOpen && <SuccessModal onClose={() => setIsModalOpen(false)} />}
       </div>
-      <Button onClick={onApply}>Apply for the job</Button>
-      {isModalOpen && <SuccessModal onClose={() => setIsModalOpen(false)} />}
-    </div>
+    </>
   )
 }
 

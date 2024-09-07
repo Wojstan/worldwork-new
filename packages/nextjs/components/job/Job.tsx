@@ -15,16 +15,13 @@ interface JobBoxProps {
 }
 
 export function JobBox({ job, hideArrow = false, className }: JobBoxProps) {
-  const image = '/worldcoin.png'
-  const position = 'React developer'
-  // const { company, position, primarySalary, secondarySalary, location } = job
   const {
-    job: { name: company, stablecoinSalary: primarySalary, tokenSalary: secondarySalary, location },
+    job: { name: company, stablecoinSalary: primarySalary, tokenSalary: secondarySalary, location, position },
   } = job
 
   return (
     <div className={`h-28 bg-white z-10 flex items-center justify-between px-6 transition ${className}`}>
-      {image && <Image alt="Logo" src={image} width={80} height={80} />}
+      <Image alt="Logo" src={companies[company]} width={80} height={80} />
       {company && <Heading3 className="mb-0 w-36">{company}</Heading3>}
 
       <div className="w-44">{position}</div>

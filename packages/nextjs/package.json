@@ -11,10 +11,13 @@
     "format": "prettier --write . '!(node_modules|.next|contracts)/**/*'",
     "check-types": "tsc --noEmit --incremental",
     "vercel": "vercel",
-    "vercel:yolo": "vercel --build-env NEXT_PUBLIC_IGNORE_BUILD_ERROR=true"
+    "vercel:yolo": "vercel --build-env NEXT_PUBLIC_IGNORE_BUILD_ERROR=true",
+    "db:migration:generate": "drizzle-kit generate",
+    "db:migration:push": "npx drizzle-kit migrate"
   },
   "dependencies": {
     "@heroicons/react": "^2.0.11",
+    "@neondatabase/serverless": "^0.9.5",
     "@rainbow-me/rainbowkit": "2.1.2",
     "@tanstack/react-query": "^5.28.6",
     "@uniswap/sdk-core": "^4.0.1",
@@ -23,6 +26,9 @@
     "blo": "^1.0.1",
     "burner-connector": "^0.0.8",
     "daisyui": "4.5.0",
+    "dotenv": "^16.4.5",
+    "drizzle-orm": "^0.33.0",
+    "drizzle-zod": "^0.5.1",
     "next": "^14.0.4",
     "next-themes": "^0.2.1",
     "nprogress": "^0.2.0",
@@ -35,6 +41,7 @@
     "usehooks-ts": "^2.13.0",
     "viem": "2.17.4",
     "wagmi": "2.10.10",
+    "zod": "^3.23.8",
     "zustand": "^4.1.2"
   },
   "devDependencies": {
@@ -46,6 +53,7 @@
     "@typescript-eslint/eslint-plugin": "^5.39.0",
     "abitype": "1.0.5",
     "autoprefixer": "^10.4.12",
+    "drizzle-kit": "^0.24.2",
     "eslint": "^8.15.0",
     "eslint-config-next": "^14.0.4",
     "eslint-config-prettier": "^8.5.0",

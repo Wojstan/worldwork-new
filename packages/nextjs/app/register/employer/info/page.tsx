@@ -6,6 +6,7 @@ import { decodeAbiParameters } from 'viem'
 import { Button } from '~~/components/ui/Button'
 import { Heading1 } from '~~/components/ui/Heading1'
 import { Input } from '~~/components/ui/Input'
+import { addEmployer, insertEmployerSchema } from '~~/db/employerActions'
 import { useScaffoldWriteContract } from '~~/hooks/scaffold-eth'
 
 const EmployerInfo: NextPage = () => {
@@ -22,6 +23,15 @@ const EmployerInfo: NextPage = () => {
     if (!address || !merkle_root || !nullifier_hash || !proof || !formData) {
       throw new Error('Invalid parameters')
     }
+    const validatedFields = insertEmployerSchema.safeParse({
+      name: formData.get('name'),
+      email: formData.get('email'),
+      wallet: address,
+    })
+    if (validatedFields.error) {
+      throw validatedFields.error
+    }
+    await addEmployer(validatedFields.data)
 
     const unpackedProof = decodeAbiParameters([{ type: 'uint256[8]' }], proof as `0x${string}`)[0]
     await writeYourContractAsync(

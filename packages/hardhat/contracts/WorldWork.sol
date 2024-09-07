@@ -207,8 +207,20 @@ contract WorldWork {
 		);
 	}
 
+	function testApplyForJob(address employer, uint index, address testAddress) public {
+		jobs[employer][index].applicants.push(testAddress);
+	}
+
 	function getJobs(address employer) public view returns (Job[] memory) {
 		return jobs[employer];
+	}
+
+	function getJobApplicants(address employer, uint index)
+		public
+		view
+		returns (address[] memory)
+	{
+		return jobs[employer][index].applicants;
 	}
 
 	// function finalizeVisit(

@@ -66,6 +66,12 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
   await transactionResponse3.wait();
   console.log('deployer', deployer)
 
+  const transactionResponse4 = await worldWork.addDefaultValuesWorker('0x90F79bf6EB2c4f870365E785982E1f101E93b906');
+  await transactionResponse4.wait();
+
+  const transactionResponse5 = await worldWork.testApplyForJob('0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266', 0, '0x90F79bf6EB2c4f870365E785982E1f101E93b906')
+  await transactionResponse5.wait();
+
   const unnamed = await hre.getUnnamedAccounts();
   console.log('abc', unnamed)
 };

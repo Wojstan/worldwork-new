@@ -40,7 +40,7 @@ const Jobs: NextPage = () => {
     <div>
       <BackButton href="/company/offers" />
 
-      <JobBox key={job.company} job={job} hideArrow className="bg-slate-50 rounded-3xl mt-2" />
+      <JobBox key={job.company} job={job} hideArrow className="bg-[#F3F4F6] rounded-3xl mt-2" />
 
       <Heading3 className="mt-8">Applicants ({employees.length})</Heading3>
 

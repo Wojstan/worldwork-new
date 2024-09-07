@@ -1,4 +1,4 @@
-import { pgTable, text } from 'drizzle-orm/pg-core'
+import { integer, pgTable, primaryKey, text } from 'drizzle-orm/pg-core'
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
 
@@ -13,6 +13,16 @@ export const employee = pgTable('employee', {
   name: text('name').notNull(),
 })
 
+export const job = pgTable('job', {
+  employer: text('employer'),
+  arrayIndex: integer('arrayIndex'),
+  description: text('description').notNull(),
+  startDate: text('startDate'),
+  endDate: text('endDate'),
+}, (table) => ({
+  pk: primaryKey({columns: [table.employer, table.arrayIndex]}),
+}))
+
 export const insertEmployerSchema = createInsertSchema(employer)
 export const selectEmployerSchema = createSelectSchema(employer)
 export type Employer = z.infer<typeof selectEmployerSchema>
@@ -22,3 +32,8 @@ export const insertEmployeeSchema = createInsertSchema(employee)
 export const selectEmployeeSchema = createSelectSchema(employee)
 export type Employee = z.infer<typeof insertEmployeeSchema>
 export type NewEmployee = z.infer<typeof selectEmployeeSchema>
+
+export const insertJobSchema = createInsertSchema(job)
+export const selectJobSchema = createSelectSchema(job)
+export type Job = z.infer<typeof insertJobSchema>
+export type NewJob = z.infer<typeof selectJobSchema>

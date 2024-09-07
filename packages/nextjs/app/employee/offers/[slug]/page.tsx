@@ -2,10 +2,7 @@
 
 import { Fragment, useState } from 'react'
 import Image from 'next/image'
-import { useRouter } from 'next/navigation'
 import { useQuery } from '@tanstack/react-query'
-import { NextPage } from 'next'
-import { useAccount } from 'wagmi'
 import { JobBox } from '~~/components/job/Job'
 import { BackButton } from '~~/components/ui/BackButton'
 import { Button } from '~~/components/ui/Button'
@@ -31,11 +28,12 @@ import { useScaffoldWriteContract } from '~~/hooks/scaffold-eth'
 const JobDetails = ({ params }: { params: { slug: string } }) => {
   const employer = '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'
   const { data, isFetching } = useQuery({
-    queryKey: ['getJob'],
+    queryKey: ['getJob', employer, params.slug],
     queryFn: async () => {
       const jobs = await getJob(employer, Number(params.slug))
       return jobs?.[0]
     },
+    enabled: !!employer,
   })
   const jobDescription = data?.job.description || ''
   const paragraphs = jobDescription.split('\n')
@@ -61,7 +59,7 @@ const JobDetails = ({ params }: { params: { slug: string } }) => {
     <>
       <BackButton href="/employee/offers" />
       <div className="flex flex-col gap-10">
-        <JobBox key={data?.job.name} job={data} hideArrow />
+        <JobBox key={data?.job.name} job={data.job} hideArrow />
         <div>
           {paragraphs.map((paragraph, index) => (
             <Fragment key={index}>

@@ -1,4 +1,4 @@
-import { integer, pgTable, primaryKey, text } from 'drizzle-orm/pg-core'
+import { boolean, integer, pgTable, primaryKey, text } from 'drizzle-orm/pg-core'
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
 
@@ -15,6 +15,7 @@ export const employee = pgTable('employee', {
 
 export const job = pgTable('job', {
   employer: text('employer').notNull(),
+  employee: text('worker'),
   arrayIndex: integer('arrayIndex').notNull(),
   name: text('name').notNull().default(''),
   description: text('description').notNull(),
@@ -24,6 +25,8 @@ export const job = pgTable('job', {
   position: text('position'),
   stablecoinSalary: integer('stablecoinSalary').notNull().default(0),
   tokenSalary: integer('tokenSalary').notNull().default(0),
+  signed: boolean('signed').default(false),
+  referenceDescription: text('referenceDescription'),
 }, (table) => ({
   pk: primaryKey({columns: [table.employer, table.arrayIndex]}),
 }))
@@ -35,10 +38,10 @@ export type NewEmployer = z.infer<typeof insertEmployerSchema>
 
 export const insertEmployeeSchema = createInsertSchema(employee)
 export const selectEmployeeSchema = createSelectSchema(employee)
-export type Employee = z.infer<typeof insertEmployeeSchema>
-export type NewEmployee = z.infer<typeof selectEmployeeSchema>
+export type Employee = z.infer<typeof selectEmployeeSchema>
+export type NewEmployee = z.infer<typeof insertEmployeeSchema>
 
 export const insertJobSchema = createInsertSchema(job)
 export const selectJobSchema = createSelectSchema(job)
-export type Job = z.infer<typeof insertJobSchema>
-export type NewJob = z.infer<typeof selectJobSchema>
+export type Job = z.infer<typeof selectJobSchema>
+export type NewJob = z.infer<typeof insertJobSchema>

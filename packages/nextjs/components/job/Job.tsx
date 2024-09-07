@@ -4,9 +4,7 @@ import { Salary } from '../Salary'
 import { Heading3 } from '../ui/Heading3'
 import { ArrowRightIcon } from '@heroicons/react/20/solid'
 import { companies } from '~~/constants/company'
-import { getJobOffers } from '~~/db/jobActions'
-
-export type Job = Awaited<ReturnType<typeof getJobOffers>>[number]
+import { Employee, Job } from '~~/db/schema'
 
 interface JobBoxProps {
   className?: string
@@ -15,9 +13,7 @@ interface JobBoxProps {
 }
 
 export function JobBox({ job, hideArrow = false, className }: JobBoxProps) {
-  const {
-    job: { name: company, stablecoinSalary: primarySalary, tokenSalary: secondarySalary, location, position },
-  } = job
+  const { name: company, stablecoinSalary: primarySalary, tokenSalary: secondarySalary, location, position } = job
 
   return (
     <div className={`h-28 bg-white z-10 flex items-center justify-between px-6 transition ${className}`}>
@@ -41,16 +37,14 @@ export function JobBox({ job, hideArrow = false, className }: JobBoxProps) {
 
 interface JobBoxLinkProps {
   job: Job
+  employee: Employee | undefined | null
   hideArrow?: boolean
   className?: string
   href: string
 }
 
-export function JobBoxLink({ job, hideArrow = false, className, href }: JobBoxLinkProps) {
-  const {
-    job: { stablecoinSalary: primarySalary, tokenSalary: secondarySalary, location, position, name: company },
-    employee,
-  } = job
+export function JobBoxLink({ job, employee, hideArrow = false, className, href }: JobBoxLinkProps) {
+  const { stablecoinSalary: primarySalary, tokenSalary: secondarySalary, location, position, name: company } = job
 
   if (!employee) {
     return 'No employee found for this job'

@@ -36,6 +36,20 @@
       "when": 1725732843477,
       "tag": "0004_lowly_blob",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1725737506792,
+      "tag": "0005_far_spacker_dave",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1725739933557,
+      "tag": "0006_elite_morph",
+      "breakpoints": true
     }
   ]
 }

@@ -28,13 +28,12 @@ export function CompanyOffers() {
   const { address } = useAccount()
 
   const { data } = useQuery({
-    queryKey: ['jobOffers', address],
+    queryKey: ['getCompanyOffers', address],
     queryFn: async () => {
-      console.log('address: ', address)
       if (!address) return []
       return await getCompanyOffers(address)
     },
-    enabled: !!address
+    enabled: !!address,
   })
 
   return (

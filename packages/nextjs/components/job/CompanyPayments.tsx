@@ -6,9 +6,7 @@ import { formatUnits } from 'viem'
 import { useAccount, useEnsName } from 'wagmi'
 import { Salary } from '~~/components/Salary'
 import { DateInfo } from '~~/components/ui/DateInfo'
-import { Heading3 } from '~~/components/ui/Heading3'
 import { Loader } from '~~/components/ui/Loader'
-import { formatTime } from '~~/utils/formatTime'
 import { shortenText } from '~~/utils/shortenText'
 
 export function CompanyPayments() {

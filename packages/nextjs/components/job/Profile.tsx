@@ -3,11 +3,14 @@ import { Employee } from '~~/app/employee/[slug]/page'
 
 interface Props {
   className?: string
-  employee: Employee
+  name: string
 }
 
-export function ProfileBox({ employee, className }: Props) {
-  const { name, avatar, email, phone, description } = employee
+export function ProfileBox({ name, className }: Props) {
+  const avatar = '/doe.png'
+  const email = 'joe@gmail.com'
+  const phone = '+48 332 554 534'
+  const description = 'descriptiondescriptiondescriptiondescription'
 
   return (
     <div className={`rounded-2xl p-6 mb-4 ${className}`}>

@@ -28,11 +28,12 @@ import { useScaffoldWriteContract } from '~~/hooks/scaffold-eth'
 const JobDetails = ({ params }: { params: { slug: string } }) => {
   const employer = '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'
   const { data, isFetching } = useQuery({
-    queryKey: ['getJob'],
+    queryKey: ['getJob', employer, params.slug],
     queryFn: async () => {
       const jobs = await getJob(employer, Number(params.slug))
       return jobs?.[0]
     },
+    enabled: !!employer,
   })
   const jobDescription = data?.job.description || ''
   const paragraphs = jobDescription.split('\n')

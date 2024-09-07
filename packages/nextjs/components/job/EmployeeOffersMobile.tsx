@@ -2,6 +2,7 @@ import { useContext, useState } from 'react'
 import Image from 'next/image'
 import { Salary } from '../Salary'
 import { TinderContext } from '../ScaffoldEthAppWithProviders'
+import { Heading1 } from '../ui/Heading1'
 import { Loader } from '../ui/Loader'
 import { Swiper } from './Swiper'
 import { TinderSwitch } from './TinderSwitch'
@@ -27,9 +28,12 @@ export function EmployeeOffersMobile({ data, isLoading }: Props) {
     setOfferCounter((prevState) => (prevState == 0 ? data.length - 1 : prevState - 1))
   }
 
+  if (isLoading) return <Loader />
+
   return (
     <div>
       <div className="px-6">
+        <div className="text-center text-3xl font-semibold mb-6 leading-relaxed">Are you looking for a job? :)</div>
         <TinderSwitch />
 
         <CurrentOffer job={data[offerCounter]} swipeLeft={swipeLeft} swipeRight={swipeRight} />
@@ -55,14 +59,14 @@ function CurrentOffer({
 
   const { name, position, location, stablecoinSalary, tokenSalary, description } = job.job
 
-  const className = expand ? 'translate-y-[-8rem]' : ''
+  const className = expand ? 'translate-y-[-18rem]' : ''
 
   return (
     <div
       onTouchStart={onTouchStart}
       onTouchMove={onTouchMove}
       onTouchEnd={onTouchEnd}
-      className={`bg-white border border-[#FF32D2] rounded-3xl p-8 text-xl relative ${className}`}
+      className={`bg-white z-40 border border-[#FF32D2] rounded-3xl p-8 text-xl relative ${className}`}
     >
       <div className="flex gap-6 items-center mb-6">
         <Image alt="avatar" src={companies[name]} width={60} height={60} />

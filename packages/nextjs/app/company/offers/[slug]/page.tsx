@@ -1,8 +1,6 @@
 'use client'
 
 import Link from 'next/link'
-import { NextPage } from 'next'
-import { Employee } from '~~/app/employee/[slug]/page'
 import { JobBox } from '~~/components/job/Job'
 import { ProfileBox } from '~~/components/job/Profile'
 import { BackButton } from '~~/components/ui/BackButton'
@@ -66,7 +64,7 @@ const Jobs = ({ params }: { params: { slug: string } }) => {
 
       <JobBox job={data.job} hideArrow className="bg-[#F3F4F6] rounded-3xl mt-2" />
 
-      <Heading3 className="mt-8">Applicants ({applicants?.length})</Heading3>
+      <Heading3 className="mt-8">Applicants ({applicants?.length || 0})</Heading3>
 
       {applicants?.map((applicant, i) => (
         <Link key={applicant} href={`/employee/${i}`}>

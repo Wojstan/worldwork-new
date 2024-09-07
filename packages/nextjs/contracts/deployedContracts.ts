@@ -7,7 +7,7 @@ import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
 const deployedContracts = {
   31337: {
     WorldId: {
-      address: "0x0165878A594ca255338adfa4d48449f69242Eb8F",
+      address: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
       abi: [
         {
           inputs: [
@@ -53,7 +53,7 @@ const deployedContracts = {
       },
     },
     WorldWork: {
-      address: "0xa513E6E4b8f2a923D98304ec87F64353C4D5C853",
+      address: "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
       abi: [
         {
           inputs: [
@@ -126,8 +126,32 @@ const deployedContracts = {
           type: "function",
         },
         {
-          inputs: [],
+          inputs: [
+            {
+              internalType: "address",
+              name: "employer",
+              type: "address",
+            },
+          ],
           name: "addDefaultJobOffer",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "employer",
+              type: "address",
+            },
+            {
+              internalType: "address",
+              name: "worker",
+              type: "address",
+            },
+          ],
+          name: "addDefaultJobOfferWithWorker",
           outputs: [],
           stateMutability: "nonpayable",
           type: "function",

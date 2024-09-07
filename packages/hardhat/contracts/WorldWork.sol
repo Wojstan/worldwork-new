@@ -186,6 +186,31 @@ contract WorldWork {
 		jobs[msg.sender][index].stage = Stage.Completed;
 	}
 
+	function addDefaultValuesEmployer(address adr) public {
+		employers[adr] = true;
+	}
+
+	function addDefaultValuesWorker(address adr) public {
+		workers[adr] = true;
+	}
+
+	function addDefaultJobOffer() public {
+		jobs[msg.sender].push(
+			Job(
+				msg.sender,
+				Salary(100, IERC20(address(0))),
+				Salary(100, IERC20(address(0))),
+				Stage.Live,
+				address(0),
+				new address[](0)
+			)
+		);
+	}
+
+	function getJobs(address employer) public view returns (Job[] memory) {
+		return jobs[employer];
+	}
+
 	// function finalizeVisit(
 	// 	address patient,
 	// 	address doctor,

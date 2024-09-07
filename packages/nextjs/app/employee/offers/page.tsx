@@ -4,6 +4,10 @@ import { NextPage } from 'next'
 import { Job, JobBoxLink } from '~~/components/job/Job'
 import { Heading1 } from '~~/components/ui/Heading1'
 import { Heading3 } from '~~/components/ui/Heading3'
+import { useScaffoldReadContract } from '~~/hooks/scaffold-eth'
+import { useQuery } from '@tanstack/react-query'
+import { getJobOffers } from '~~/db/jobActions'
+
 
 const jobs: Job[] = [
   {
@@ -41,6 +45,22 @@ const jobs: Job[] = [
 ]
 
 const Jobs: NextPage = () => {
+
+  // const { data } = useScaffoldReadContract({
+  //   contractName: 'WorldWork',
+  //   functionName: 'getJobs',
+  //   args: [address]
+  // })
+  
+  const { data } = useQuery({
+    queryKey: ['jobOffers'],
+    queryFn: async () => {
+      return await getJobOffers()
+    },
+  })
+
+  console.log('data offerst', data)
+
   return (
     <div>
       <Heading1>Are you looking for a job? :)</Heading1>

@@ -14,11 +14,15 @@ export const employee = pgTable('employee', {
 })
 
 export const job = pgTable('job', {
-  employer: text('employer'),
-  arrayIndex: integer('arrayIndex'),
+  employer: text('employer').notNull(),
+  arrayIndex: integer('arrayIndex').notNull(),
+  name: text('name').notNull().default(''),
   description: text('description').notNull(),
   startDate: text('startDate'),
   endDate: text('endDate'),
+  location: text('location'),
+  stablecoinSalary: integer('stablecoinSalary').notNull().default(0),
+  tokenSalary: integer('tokenSalary').notNull().default(0),
 }, (table) => ({
   pk: primaryKey({columns: [table.employer, table.arrayIndex]}),
 }))

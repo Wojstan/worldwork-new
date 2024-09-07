@@ -2,7 +2,7 @@
 
 import { NextPage } from 'next'
 import { EmployerJobBox } from '~~/components/job/EmployerJob'
-import { Job, JobBox } from '~~/components/job/Job'
+import { Job } from '~~/components/job/Job'
 import { Heading1 } from '~~/components/ui/Heading1'
 import { Heading3 } from '~~/components/ui/Heading3'
 
@@ -33,7 +33,7 @@ const Jobs: NextPage = () => {
         ))}
       </div>
 
-      <img className="absolute bottom-0 right-0" src="/jobs.svg" alt="" />
+      <img className="absolute bottom-0 right-0" src="/company.svg" alt="" />
     </div>
   )
 }

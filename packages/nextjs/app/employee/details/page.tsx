@@ -7,6 +7,8 @@ import { Job, JobBox } from '~~/components/job/Job'
 import { Button } from '~~/components/ui/Button'
 import { Heading2 } from '~~/components/ui/Heading2'
 import { Heading4 } from '~~/components/ui/Heading4'
+import { useScaffoldWriteContract } from '~~/hooks/scaffold-eth'
+import { useAccount } from 'wagmi'
 
 const job: Job = {
   image: '/worldcoin.png',
@@ -24,6 +26,18 @@ We’re looking for a Blockchain Engineer that wants to change the world. If you
 const JobDetails: NextPage = () => {
   const paragraphs = jobDescription.split('\n')
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const { writeContractAsync: writeYourContractAsync } = useScaffoldWriteContract('WorldWork')
+  const { address } = useAccount()
+
+  const onSuccess = async () => {
+    await writeYourContractAsync(
+      {
+        functionName: 'applyForJob',
+        args: [address],
+      },
+    )
+    setIsModalOpen(true)
+  }
 
   return (
     <div className="flex flex-col gap-10">

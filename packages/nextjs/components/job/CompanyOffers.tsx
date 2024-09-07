@@ -43,6 +43,8 @@ export function CompanyOffers() {
     args: [address]
   })
 
+  console.log('dataFromContract', dataFromContract)
+
   return (
     <div>
       <Heading1>Company data</Heading1>
@@ -51,6 +53,7 @@ export function CompanyOffers() {
       <div className="flex flex-col gap-3">
         {data?.map((job, i) => {
           const contractElement = dataFromContract?.find((element, i) => element.employer == job.employer && i == job.arrayIndex)
+          // console.log('contractElement', contractElement)
           return (
             <EmployerJobBox newLabel={i == 0} key={job.arrayIndex} job={job} index={i} numberOfApplicants={contractElement?.applicants.length}/>
           )

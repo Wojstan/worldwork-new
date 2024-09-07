@@ -2960,6 +2960,7 @@ __metadata:
     dotenv: ^16.4.5
     drizzle-kit: ^0.24.2
     drizzle-orm: ^0.33.0
+    drizzle-zod: ^0.5.1
     eslint: ^8.15.0
     eslint-config-next: ^14.0.4
     eslint-config-prettier: ^8.5.0
@@ -6943,6 +6944,16 @@ __metadata:
     sqlite3:
       optional: true
   checksum: f7e1d1a7d57f3f4e57be7d276e485f373c5f4fbf3432bc642d58912e2c7162c1f2d4615656e99d199189cdfce420029f8fbe45925b65263f99111855a64e3b46
+  languageName: node
+  linkType: hard
+
+"drizzle-zod@npm:^0.5.1":
+  version: 0.5.1
+  resolution: "drizzle-zod@npm:0.5.1"
+  peerDependencies:
+    drizzle-orm: ">=0.23.13"
+    zod: "*"
+  checksum: 4a2562b16dc519280eaabc01c19042f359249dd36b266b382a1b89343515a6621736f6849ad0863b403676d4852049123fe0e82ba90f0d1b80da5ec815a5a5e4
   languageName: node
   linkType: hard
 

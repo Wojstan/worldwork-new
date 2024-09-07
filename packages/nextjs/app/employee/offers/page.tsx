@@ -19,7 +19,6 @@ const Jobs: NextPage = () => {
 
   return (
     <div>
-      <Heading1>Are you looking for a job? :)</Heading1>
 
       {isMobile ? <EmployeeOffersMobile /> : <EmployeeOffers data={data} isLoading={isLoading} />}
     </div>

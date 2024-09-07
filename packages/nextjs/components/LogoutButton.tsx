@@ -18,6 +18,8 @@ export function LogoutButton() {
     },
   })
 
+  return null
+
   return (
     <div className="flex flex-row justify-center items-center bg-[#B881FF33] rounded-full font-semibold text-sm text-[#B881FF] pl-5">
       {data || address}

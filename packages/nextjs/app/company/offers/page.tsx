@@ -14,13 +14,13 @@ const Jobs: NextPage = () => {
   return (
     <div>
       <ul className="flex gap-4 font-semibold cursor-pointer mb-6 text-lg text-accent">
-        <li className={tab === 'offers' ? 'underline' : ''} onClick={() => setTab('offers')}>
+        <li key="offers" className={tab === 'offers' ? 'underline' : ''} onClick={() => setTab('offers')}>
           Your company offers
         </li>
-        <li className={tab === 'employees' ? 'underline' : ''} onClick={() => setTab('employees')}>
+        <li key="employees" className={tab === 'employees' ? 'underline' : ''} onClick={() => setTab('employees')}>
           Employees
         </li>
-        <li className={tab === 'payments' ? 'underline' : ''} onClick={() => setTab('payments')}>
+        <li key="payments" className={tab === 'payments' ? 'underline' : ''} onClick={() => setTab('payments')}>
           Payments
         </li>
       </ul>

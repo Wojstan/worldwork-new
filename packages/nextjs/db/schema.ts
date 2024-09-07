@@ -5,6 +5,3 @@ export const employer = pgTable('employer', {
   name: text('name').notNull(),
   email: text('email').notNull(),
 })
-
-export type Employer = typeof employer.$inferSelect
-export type NewEmployer = typeof employer.$inferInsert

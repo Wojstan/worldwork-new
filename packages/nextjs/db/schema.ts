@@ -1,6 +1,6 @@
-import { integer, pgTable, primaryKey, text } from 'drizzle-orm/pg-core'
-import { createInsertSchema, createSelectSchema } from "drizzle-zod";
-import { z } from "zod";
+import { boolean, integer, pgTable, primaryKey, text } from 'drizzle-orm/pg-core'
+import { createInsertSchema, createSelectSchema } from 'drizzle-zod'
+import { z } from 'zod'
 
 export const employer = pgTable('employer', {
   wallet: text('wallet').primaryKey(),
@@ -13,20 +13,26 @@ export const employee = pgTable('employee', {
   name: text('name').notNull(),
 })
 
-export const job = pgTable('job', {
-  employer: text('employer').notNull(),
-  arrayIndex: integer('arrayIndex').notNull(),
-  name: text('name').notNull().default(''),
-  description: text('description').notNull(),
-  startDate: text('startDate'),
-  endDate: text('endDate'),
-  location: text('location'),
-  position: text('position'),
-  stablecoinSalary: integer('stablecoinSalary').notNull().default(0),
-  tokenSalary: integer('tokenSalary').notNull().default(0),
-}, (table) => ({
-  pk: primaryKey({columns: [table.employer, table.arrayIndex]}),
-}))
+export const job = pgTable(
+  'job',
+  {
+    employer: text('employer').notNull(),
+    arrayIndex: integer('arrayIndex').notNull(),
+    name: text('name').notNull().default(''),
+    description: text('description').notNull(),
+    startDate: text('startDate'),
+    endDate: text('endDate'),
+    location: text('location'),
+    position: text('position'),
+    signed: boolean('signed').default(false),
+    referenceDescription: text('referenceDescription'),
+    stablecoinSalary: integer('stablecoinSalary').notNull().default(0),
+    tokenSalary: integer('tokenSalary').notNull().default(0),
+  },
+  (table) => ({
+    pk: primaryKey({ columns: [table.employer, table.arrayIndex] }),
+  }),
+)
 
 export const insertEmployerSchema = createInsertSchema(employer)
 export const selectEmployerSchema = createSelectSchema(employer)

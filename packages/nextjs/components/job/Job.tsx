@@ -6,7 +6,7 @@ import { ArrowRightIcon } from '@heroicons/react/20/solid'
 import { companies } from '~~/constants/company'
 import { getJobOffers } from '~~/db/jobActions'
 
-type Job = Awaited<ReturnType<typeof getJobOffers>>[number]
+export type Job = Awaited<ReturnType<typeof getJobOffers>>[number]
 
 interface JobBoxProps {
   className?: string

@@ -21,7 +21,7 @@ export function CompanyEmployees() {
 
       <div className="flex flex-col gap-3 mt-8">
         {employees.map((employee, i) => (
-          <EmployeeBox paid={i == 0} newLabel={i == 0} employee={employee as Employee} />
+          <EmployeeBox key={employee.id} paid={i == 0} newLabel={i == 0} employee={employee as Employee} />
         ))}
       </div>
     </div>

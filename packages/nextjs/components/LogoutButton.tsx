@@ -1,8 +1,8 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
+import { sepolia } from 'viem/chains'
 import { useAccount, useDisconnect, useEnsName } from 'wagmi'
-import { sepolia } from "viem/chains";
 
 export function LogoutButton() {
   const { address } = useAccount()

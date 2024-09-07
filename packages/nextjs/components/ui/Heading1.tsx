@@ -6,7 +6,7 @@ interface Props {
 
 export function Heading1({ children }: Props) {
   return (
-    <div className="text-center">
+    <div className="">
       <h1 className="text-4xl md:text-5xl font-semibold text-semantic-accent-content">{children}</h1>
     </div>
   )

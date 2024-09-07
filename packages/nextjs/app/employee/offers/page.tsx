@@ -15,7 +15,6 @@ const Jobs: NextPage = () => {
     },
   })
 
-  console.log(data)
   const isMobile = isMobileView()
 
   return (

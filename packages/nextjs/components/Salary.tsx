@@ -6,8 +6,11 @@ interface Props {
 }
 
 export function Salary({ primary, secondary }: Props) {
+
+
+
   return (
-    <div className="flex flex-col items-end w-44">
+    <div className="flex flex-col md:items-end md:w-44 gap-1">
       <span>
         <span className="font-bold">${primary}.00</span> USD
       </span>

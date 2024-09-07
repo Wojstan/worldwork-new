@@ -1,9 +1,8 @@
 'use client'
-
 import { useEffect, useState } from 'react'
 
 export function isMobileView() {
-  const [width, setWidth] = useState<number>(0)
+  const [width, setWidth] = useState<number>(1300)
 
   useEffect(() => {
     const handleWindowSizeChange = () => {

@@ -7,11 +7,11 @@ import { Loader } from '../ui/Loader'
 import { Swiper } from './Swiper'
 import { TinderSwitch } from './TinderSwitch'
 import { companies } from '~~/constants/company'
-import { Employee, Job } from '~~/db/schema'
+import { Employer, Job } from '~~/db/schema'
 import { useSwipe } from '~~/hooks/useSwipe'
 
 interface Props {
-  data: { job: Job; employee: Employee | null }[]
+  data: { job: Job; employer: Employer | null }[]
   isLoading: boolean
 }
 
@@ -51,7 +51,7 @@ function CurrentOffer({
 }: {
   swipeLeft: () => void
   swipeRight: () => void
-  job?: { job: Job; employee: Employee | null }
+  job?: { job: Job; employer: Employer | null }
 }) {
   const { onTouchEnd, onTouchMove, onTouchStart } = useSwipe(swipeLeft, swipeRight)
   const [expand, setExpand] = useState(false)

@@ -37,18 +37,20 @@ export function JobBox({ job, hideArrow = false, className }: JobBoxProps) {
 
 interface JobBoxLinkProps {
   job: Job
-  employee: Employee | undefined | null
+  employer: Employee | undefined | null
   hideArrow?: boolean
   className?: string
   href: string
 }
 
-export function JobBoxLink({ job, employee, hideArrow = false, className, href }: JobBoxLinkProps) {
-  const { stablecoinSalary: primarySalary, tokenSalary: secondarySalary, location, position, name: company } = job
+export function JobBoxLink({ job, employer, hideArrow = false, className, href }: JobBoxLinkProps) {
+  const { stablecoinSalary: primarySalary, tokenSalary: secondarySalary, location, position } = job
 
-  if (!employee) {
+  if (!employer) {
     return 'No employee found for this job'
   }
+
+  const company = employer.name
 
   return (
     <Link

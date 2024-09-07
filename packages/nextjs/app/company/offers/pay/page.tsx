@@ -32,7 +32,7 @@ const Pay = () => {
       console.log('web3SignatureProvider: ', web3SignatureProvider)
       const requestClient = new RequestNetwork({
         nodeConnectionConfig: {
-          baseURL: "https://sepolia.gateway.request.network/",
+          baseURL: "https://gnosis.gateway.request.network/",
         },
         signatureProvider: web3SignatureProvider,
       });

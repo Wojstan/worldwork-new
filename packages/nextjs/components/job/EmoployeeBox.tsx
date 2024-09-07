@@ -4,16 +4,17 @@ import { Button } from '../ui/Button'
 import { namehash } from 'viem'
 import { CheckIcon } from '@heroicons/react/20/solid'
 import { Employee } from '~~/app/employee/[slug]/page'
+import { shortenText } from '~~/utils/shortenText'
 
 interface Props {
   className?: string
-  employee: Employee
   newLabel: boolean
   paid: boolean
+  avatar: string
+  name: string
 }
 
-export function EmployeeBox({ className, employee, newLabel, paid }: Props) {
-  const { avatar, name } = employee
+export function EmployeeBox({ className, newLabel, paid, avatar, name }: Props) {
 
   return (
     <div
@@ -21,7 +22,7 @@ export function EmployeeBox({ className, employee, newLabel, paid }: Props) {
     >
       <div className="flex gap-8 items-center">
         <Image alt="avatar" src={avatar} width={80} height={80} />
-        <div className="font-semibold text-lg">{name}</div>
+        <div className="font-semibold text-lg">{shortenText(name)}</div>
       </div>
 
       <Salary primary={5000} secondary={10000} />

@@ -11,9 +11,12 @@ import { insertJobSchema } from '~~/db/schema'
 import { useScaffoldReadContract, useScaffoldWriteContract } from '~~/hooks/scaffold-eth'
 import { addJobOffer } from '~~/db/jobActions'
 import { useAccount } from 'wagmi'
+import { useRouter } from 'next/navigation'
 
 const AddJob: NextPage = () => {
   const { address } = useAccount()
+
+  const router = useRouter();
 
   const { writeContractAsync: writeYourContractAsync } = useScaffoldWriteContract('WorldWork')
   const { data } = useScaffoldReadContract({
@@ -46,6 +49,7 @@ const AddJob: NextPage = () => {
       },
     )
     await addJobOffer(validatedFields)
+    router.push('/company/offers')
   }
 
   return (

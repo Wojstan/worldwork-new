@@ -11,7 +11,7 @@ import { Heading4 } from '~~/components/ui/Heading4'
 import { Loader } from '~~/components/ui/Loader'
 import { getJob } from '~~/db/jobActions'
 import { useScaffoldWriteContract } from '~~/hooks/scaffold-eth'
-import { useSearchParams } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 
 // const job = {
 //   image: '/worldcoin.png',
@@ -28,6 +28,8 @@ import { useSearchParams } from 'next/navigation'
 
 const JobDetails = ({ params }: { params: { slug: string} }) => {
   const searchParams = useSearchParams()
+  const router = useRouter();
+
   const employer = params.slug
   const index = searchParams?.get('index') || ''
   const { data, isFetching } = useQuery({
@@ -56,6 +58,11 @@ const JobDetails = ({ params }: { params: { slug: string} }) => {
     setIsModalOpen(true)
   }
 
+  const onCloseModal = () => {
+    setIsModalOpen(false)
+    router.push('/employee/offers')
+  }
+
   if (isFetching || !data) return <Loader />
 
   return (
@@ -72,7 +79,7 @@ const JobDetails = ({ params }: { params: { slug: string} }) => {
           ))}
         </div>
         <Button onClick={onApply}>Apply for the job</Button>
-        {isModalOpen && <SuccessModal onClose={() => setIsModalOpen(false)} />}
+        {isModalOpen && <SuccessModal onClose={() => onCloseModal()} />}
       </div>
     </>
   )

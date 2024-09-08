@@ -13,7 +13,11 @@ export const getJobOffers = () => {
 }
 
 export const getJob = (employerAddress: string, index: number) => {
-  return db.select().from(job).where(and(eq(job.employer, employerAddress), eq(job.arrayIndex, index))).leftJoin(employer, eq(job.employer, employer.wallet))
+  return db
+    .select()
+    .from(job)
+    .where(and(eq(job.employer, employerAddress), eq(job.arrayIndex, index)))
+    .leftJoin(employer, eq(job.employer, employer.wallet))
 }
 
 export const getCompanyOffers = (employer: string) => {
@@ -33,4 +37,11 @@ export const acceptEmployeeForJob = async (employeeAddress: string, employer: st
       signed: true,
     })
     .where(and(eq(job.employer, employer), eq(job.arrayIndex, index)))
+}
+
+export const getJobByEmployerAndEmployee = async (employerAddress: string, employeeAddress: string) => {
+  return db
+    .select()
+    .from(job)
+    .where(and(eq(job.employer, employerAddress), eq(job.employee, employeeAddress)))
 }

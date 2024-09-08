@@ -17,7 +17,6 @@ import { useScaffoldWriteContract } from '~~/hooks/scaffold-eth'
 
 const EmployerInfo: NextPage = () => {
   const searchParams = useSearchParams()
-  console.log(searchParams)
   const address = searchParams?.get('address')
   const merkle_root = searchParams?.get('merkle_root')
   const nullifier_hash = searchParams?.get('nullifier_hash')
@@ -27,9 +26,9 @@ const EmployerInfo: NextPage = () => {
 
   const { mutateAsync, data, isPending } = useMutation({
     mutationFn: async (formData: FormData) => {
-      // if (!address || !merkle_root || !nullifier_hash || !proof || !formData) {
-      //   throw new Error('Invalid parameters')
-      // }
+      if (!address || !merkle_root || !nullifier_hash || !proof || !formData) {
+        throw new Error('Invalid parameters')
+      }
 
       const validatedFields = insertEmployerSchema.parse({
         name: formData.get('name'),
@@ -37,12 +36,12 @@ const EmployerInfo: NextPage = () => {
         wallet: address,
       })
 
-      // const unpackedProof = decodeAbiParameters([{ type: 'uint256[8]' }], proof as `0x${string}`)[0]
-      // await writeYourContractAsync({
-      //   functionName: 'registerEmployer',
-      //   args: [address, BigInt(merkle_root), BigInt(nullifier_hash), unpackedProof],
-      // })
-      // await addEmployer(validatedFields)
+      const unpackedProof = decodeAbiParameters([{ type: 'uint256[8]' }], proof as `0x${string}`)[0]
+      await writeYourContractAsync({
+        functionName: 'registerEmployer',
+        args: [address, BigInt(merkle_root), BigInt(nullifier_hash), unpackedProof],
+      })
+      await addEmployer(validatedFields)
       const nickname = formData.get('nickname')
       if (!nickname) {
         router.push('/company/offers')

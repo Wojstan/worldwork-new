@@ -53,7 +53,7 @@ export function CompanyOffers() {
                 newLabel={i == 0}
                 key={job.arrayIndex}
                 job={job}
-                index={i}
+                index={job.arrayIndex}
                 numberOfApplicants={contractElement?.applicants.length}
               />
             )

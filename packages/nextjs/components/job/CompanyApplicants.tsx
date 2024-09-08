@@ -20,7 +20,7 @@ export function CompanyApplicants({ data, applicants }: Props) {
       <Heading3 className="mt-8">Applicants ({applicants?.length || 0})</Heading3>
 
       {applicants?.map((applicant, i) => (
-        <Link key={applicant} href={`/employee/${i}`}>
+        <Link key={applicant} href={`/employee/${applicant}?index=${data.job.arrayIndex}`}>
           <ProfileBox
             name={applicant}
             className={i % 2 ? 'bg-primary hover:bg-[#b99dde]' : 'bg-secondary hover:bg-[#fcd46e]'}

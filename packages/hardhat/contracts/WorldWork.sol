@@ -51,6 +51,8 @@ contract WorldWork {
 	/// @dev The World ID group ID (always 1)
 	uint256 internal immutable groupId = 1;
 
+	address tokenDWL = 0x5c383F1AfdC3B39dD4367d16CB8Bb72605EB08A8;
+
 	/// @dev Whether a nullifier hash has been used already. Used to guarantee an action is only performed once by a single person
 	mapping(uint256 => bool) internal nullifierHashes;
 
@@ -157,8 +159,8 @@ contract WorldWork {
 		jobs[msg.sender].push(
 			Job(
 				msg.sender,
-				Salary(stablecoinSalary, IERC20(address(0))),
-				Salary(tokenSalary, IERC20(address(0))),
+				Salary(stablecoinSalary, IERC20(tokenDWL)),
+				Salary(tokenSalary, IERC20(tokenDWL)),
 				Stage.Live,
 				address(0),
 				new address[](0)

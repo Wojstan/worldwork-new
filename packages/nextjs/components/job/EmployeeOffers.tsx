@@ -21,7 +21,7 @@ export function EmployeeOffers({ data, isLoading }: Props) {
         <div className="flex flex-col gap-3">
           {data?.map((job) => (
             <JobBoxLink
-              key={job.job.name}
+              key={job.job.employer + job.job.arrayIndex}
               job={job.job}
               employer={job.employer}
               href={`/employee/offers/${job.job.employer}?index=${job.job.arrayIndex}`}

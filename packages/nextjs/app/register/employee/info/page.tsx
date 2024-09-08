@@ -12,11 +12,10 @@ import { addEmployee } from "~~/db/employeeActions";
 
 const EmployeeInfo: NextPage = () => {
   const searchParams = useSearchParams()
-  console.log(searchParams)
-  const address = searchParams.get('address')
-  const merkle_root = searchParams.get('merkle_root')
-  const nullifier_hash = searchParams.get('nullifier_hash')
-  const proof = searchParams.get('proof')
+  const address = searchParams?.get('address')
+  const merkle_root = searchParams?.get('merkle_root')
+  const nullifier_hash = searchParams?.get('nullifier_hash')
+  const proof = searchParams?.get('proof')
   const { writeContractAsync: writeYourContractAsync } = useScaffoldWriteContract('WorldWork')
   const router = useRouter()
 

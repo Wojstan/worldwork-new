@@ -13,7 +13,8 @@
     "vercel": "vercel",
     "vercel:yolo": "vercel --build-env NEXT_PUBLIC_IGNORE_BUILD_ERROR=true",
     "db:migration:generate": "drizzle-kit generate",
-    "db:migration:push": "npx drizzle-kit migrate"
+    "db:migration:push": "npx drizzle-kit migrate",
+    "tsc": "tsc"
   },
   "dependencies": {
     "@ensdomains/ensjs": "4.0.0",

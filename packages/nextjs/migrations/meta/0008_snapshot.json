@@ -1,6 +1,6 @@
 {
-  "id": "3af3d857-fa99-46f6-9f93-e1ddb162181c",
-  "prevId": "d5a48672-71e8-4d4b-bfc0-6ad54d41d7ef",
+  "id": "1511d663-493c-4fde-b130-9f6c05fa88bd",
+  "prevId": "3af3d857-fa99-46f6-9f93-e1ddb162181c",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -88,6 +88,18 @@
           "type": "text",
           "primaryKey": false,
           "notNull": true
+        },
+        "startDate": {
+          "name": "startDate",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "endDate": {
+          "name": "endDate",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": false
         },
         "location": {
           "name": "location",

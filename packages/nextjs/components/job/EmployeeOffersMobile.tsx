@@ -1,5 +1,6 @@
 import { useContext, useState } from 'react'
 import Image from 'next/image'
+import { Match } from '../Match'
 import { Salary } from '../Salary'
 import { TinderContext } from '../ScaffoldEthAppWithProviders'
 import { Heading1 } from '../ui/Heading1'
@@ -37,7 +38,12 @@ export function EmployeeOffersMobile({ data, isLoading }: Props) {
         <TinderSwitch />
 
         {isTinder ? (
-          <CurrentOffer job={data[offerCounter]} swipeLeft={swipeLeft} swipeRight={swipeRight} />
+          <CurrentOffer
+            setOffer={setOfferCounter}
+            job={data[offerCounter]}
+            swipeLeft={swipeLeft}
+            swipeRight={swipeRight}
+          />
         ) : (
           <ul>
             {data.map((job) => (
@@ -55,13 +61,13 @@ export function EmployeeOffersMobile({ data, isLoading }: Props) {
 function Offer({ job }: { job?: { job: Job; employer: Employer | null } }) {
   if (!job) return <Loader />
 
-  const { name, position, location, stablecoinSalary, tokenSalary, description } = job.job
+  const { position, location, stablecoinSalary, tokenSalary } = job.job
 
   return (
     <div className="bg-white z-40 border border-black rounded-3xl p-8 text-xl mb-6">
       <div className="flex gap-6 items-center mb-6">
-        <Image alt="avatar" src={companies[name]} width={60} height={60} />
-        <div className="font-bold text-xxl text-black">{name}</div>
+        <Image alt="avatar" src={companies[job.employer?.name as string]} width={60} height={60} />
+        <div className="font-bold text-xxl text-black">{job.employer?.name}</div>
       </div>
       <div>{position}</div>
       <div className="font-bold mt-4">{location}</div>
@@ -77,9 +83,11 @@ function CurrentOffer({
   job,
   swipeLeft,
   swipeRight,
+  setOffer,
 }: {
   swipeLeft: () => void
   swipeRight: () => void
+  setOffer: (id: number) => void
   job?: { job: Job; employer: Employer | null }
 }) {
   const { onTouchEnd, onTouchMove, onTouchStart } = useSwipe(swipeLeft, swipeRight)
@@ -91,6 +99,12 @@ function CurrentOffer({
   const name = job.employer?.name
 
   const className = expand ? 'translate-y-[-18rem]' : ''
+
+  if (job.employer?.name === 'Evil Corp') {
+    setTimeout(() => setOffer(0), 3000)
+
+    return <Match matchedCompany="/worldcoin.png" />
+  }
 
   return (
     <div

@@ -62,7 +62,7 @@ const Jobs = ({ params }: { params: { slug: string } }) => {
     <div>
       <BackButton href="/company/offers" />
 
-      <JobBox job={data.job} hideArrow className="bg-[#F3F4F6] rounded-3xl mt-2" />
+      <JobBox job={data.job} employer={data.employer} hideArrow className="bg-[#F3F4F6] rounded-3xl mt-2" />
 
       <Heading3 className="mt-8">Applicants ({applicants?.length || 0})</Heading3>
 

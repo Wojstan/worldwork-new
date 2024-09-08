@@ -2,7 +2,7 @@ import { Heading1 } from '../ui/Heading1'
 import { Heading3 } from '../ui/Heading3'
 import { Loader } from '../ui/Loader'
 import { JobBoxLink } from './Job'
-import { Employee, Employer, Job } from '~~/db/schema'
+import { Employer, Job } from '~~/db/schema'
 
 interface Props {
   data: { job: Job; employer: Employer | null }[]
@@ -24,7 +24,7 @@ export function EmployeeOffers({ data, isLoading }: Props) {
               key={job.job.name}
               job={job.job}
               employer={job.employer}
-              href={`/employee/offers/${job.job.arrayIndex}`}
+              href={`/employee/offers/${job.job.employer}?index=${job.job.arrayIndex}`}
             />
           ))}
         </div>

@@ -11,6 +11,7 @@ import { Heading4 } from '~~/components/ui/Heading4'
 import { Loader } from '~~/components/ui/Loader'
 import { getJob } from '~~/db/jobActions'
 import { useScaffoldWriteContract } from '~~/hooks/scaffold-eth'
+import { useSearchParams } from 'next/navigation'
 
 // const job = {
 //   image: '/worldcoin.png',
@@ -25,12 +26,14 @@ import { useScaffoldWriteContract } from '~~/hooks/scaffold-eth'
 // From building a new financial backend to creating an innovative app, there’s nothing they can’t do. Our Technology team isn’t here to fix legacy systems — it’s here to build world-class financial features from the ground up that'll be used by millions of people around the world 🌎
 // We’re looking for a Blockchain Engineer that wants to change the world. If you like to work at a steady pace with no surprises, keep scrolling. If you want your work to change the global financial landscape, you might be just who we’re looking for. We have a minimalist approach to using external frameworks, with an emphasis on maintainability and fast turnaround with TDD, DDD, and Continuous Integration & Delivery.`
 
-const JobDetails = ({ params }: { params: { slug: string } }) => {
-  const employer = '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'
+const JobDetails = ({ params }: { params: { slug: string} }) => {
+  const searchParams = useSearchParams()
+  const employer = params.slug
+  const index = searchParams?.get('index') || ''
   const { data, isFetching } = useQuery({
-    queryKey: ['getJob', employer, params.slug],
+    queryKey: ['getJob', employer, index],
     queryFn: async () => {
-      const jobs = await getJob(employer, Number(params.slug))
+      const jobs = await getJob(employer, Number(index))
       return jobs?.[0]
     },
     enabled: !!employer,
@@ -59,7 +62,7 @@ const JobDetails = ({ params }: { params: { slug: string } }) => {
     <>
       <BackButton href="/employee/offers" />
       <div className="flex flex-col gap-10">
-        <JobBox key={data?.job.name} job={data.job} hideArrow />
+        <JobBox key={data?.job.name} employer={data.employer} job={data.job} hideArrow />
         <div>
           {paragraphs.map((paragraph, index) => (
             <Fragment key={index}>

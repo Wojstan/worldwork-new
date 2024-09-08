@@ -13,8 +13,8 @@ export const getJobOffers = () => {
   return db.select().from(job).leftJoin(employer, eq(job.employer, employer.wallet))
 }
 
-export const getJob = (employer: string, index: number) => {
-  return db.select().from(job).where(and(eq(job.employer, employer), eq(job.arrayIndex, index))).leftJoin(employee, eq(job.employer, employee.wallet))
+export const getJob = (employerAddress: string, index: number) => {
+  return db.select().from(job).where(and(eq(job.employer, employerAddress), eq(job.arrayIndex, index))).leftJoin(employer, eq(job.employer, employer.wallet))
 }
 
 export const getCompanyOffers = (employer: string) => {

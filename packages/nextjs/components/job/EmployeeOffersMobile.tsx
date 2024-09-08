@@ -100,10 +100,10 @@ function CurrentOffer({
 
   const className = expand ? 'translate-y-[-18rem]' : ''
 
-  if (job.employer?.name === 'Evil Corp') {
+  if (job.employer?.name === 'ETH Warsaw') {
     setTimeout(() => setOffer(0), 3000)
 
-    return <Match matchedCompany="/worldcoin.png" />
+    return <Match matchedCompany="/ens.png" />
   }
 
   return (

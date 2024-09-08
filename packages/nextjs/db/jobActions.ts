@@ -9,7 +9,7 @@ export const addJobOffer = (newJob: NewJob) => {
 }
 
 export const getJobOffers = () => {
-  return db.select().from(job).leftJoin(employer, eq(job.employer, employer.wallet))
+  return db.select().from(job).leftJoin(employer, eq(job.employer, employer.wallet)).where(isNull(job.employee))
 }
 
 export const getJob = (employerAddress: string, index: number) => {

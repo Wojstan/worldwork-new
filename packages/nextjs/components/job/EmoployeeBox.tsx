@@ -5,7 +5,7 @@ import { Button } from '../ui/Button'
 import { approveErc20, hasErc20Approval, hasSufficientFunds, payRequest } from '@requestnetwork/payment-processor'
 import { RequestNetwork, Types, Utils } from '@requestnetwork/request-client.js'
 import { Web3SignatureProvider } from '@requestnetwork/web3-signature'
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Address, Hex, parseUnits } from 'viem'
 import { waitForTransactionReceipt } from 'viem/actions'
 import { Config, useClient, useEnsName, useWalletClient } from 'wagmi'
@@ -34,6 +34,7 @@ export function EmployeeBox({ employerAddress, employeeAddress, className, newLa
   const wagmiClient = useClient<Config>()
   const signer = useEthersSigner()
   const router = useRouter()
+  const queryClient = useQueryClient()
 
   const { data, isLoading } = useQuery({
     queryKey: ['jobByBoth', employerAddress, employeeAddress],
@@ -100,7 +101,7 @@ export function EmployeeBox({ employerAddress, employeeAddress, className, newLa
       }
       await makeJobPayment(singleJob.employer, singleJob.arrayIndex)
     },
-    onSuccess: () => router.push('/company/offers'),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['jobByBoth'] }),
   })
 
   if (isLoading) {

@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import { Loader } from '../ui/Loader'
 import { useQuery } from '@tanstack/react-query'
 import { useAccount } from 'wagmi'
 import { EmployerJobBox } from '~~/components/job/EmployerJob'
@@ -13,7 +14,7 @@ import { useScaffoldReadContract } from '~~/hooks/scaffold-eth'
 export function CompanyOffers() {
   const { address } = useAccount()
 
-  const { data } = useQuery({
+  const { data, isLoading: isLoadingOffers } = useQuery({
     queryKey: ['getCompanyOffers', address],
     queryFn: async () => {
       if (!address) return []
@@ -22,11 +23,13 @@ export function CompanyOffers() {
     enabled: !!address,
   })
 
-  const { data: dataFromContract } = useScaffoldReadContract({
+  const { data: dataFromContract, isLoading: isLoadingJobs } = useScaffoldReadContract({
     contractName: 'WorldWork',
     functionName: 'getJobs',
     args: [address],
   })
+
+  const isLoading = isLoadingJobs || isLoadingOffers || !data || !dataFromContract
 
   console.log('dataFromContract', dataFromContract)
 
@@ -35,23 +38,27 @@ export function CompanyOffers() {
       <Heading1>Company data</Heading1>
       <Heading3 className="mb-8">Your company offers:</Heading3>
 
-      <div className="flex flex-col gap-3">
-        {data?.map((job, i) => {
-          const contractElement = dataFromContract?.find(
-            (element, i) => element.employer == job.employer && i == job.arrayIndex,
-          )
-          // console.log('contractElement', contractElement)
-          return (
-            <EmployerJobBox
-              newLabel={i == 0}
-              key={job.arrayIndex}
-              job={job}
-              index={i}
-              numberOfApplicants={contractElement?.applicants.length}
-            />
-          )
-        })}
-      </div>
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <div className="flex flex-col gap-3">
+          {data?.map((job, i) => {
+            const contractElement = dataFromContract?.find(
+              (element, i) => element.employer == job.employer && i == job.arrayIndex,
+            )
+
+            return (
+              <EmployerJobBox
+                newLabel={i == 0}
+                key={job.arrayIndex}
+                job={job}
+                index={i}
+                numberOfApplicants={contractElement?.applicants.length}
+              />
+            )
+          })}
+        </div>
+      )}
 
       <div className="flex justify-center p-4">
         <Link href="/company/add">

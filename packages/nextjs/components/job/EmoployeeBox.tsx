@@ -1,20 +1,35 @@
 import Image from 'next/image'
 import { Salary } from '../Salary'
 import { Button } from '../ui/Button'
-import { namehash } from 'viem'
+import { useQuery } from '@tanstack/react-query'
+import { useEnsAddress, useEnsName } from 'wagmi'
 import { CheckIcon } from '@heroicons/react/20/solid'
-import { Employee } from '~~/app/employee/[slug]/page'
+import { Loader } from '~~/components/ui/Loader'
+import { getJobByEmployerAndEmployee } from '~~/db/jobActions'
 import { shortenText } from '~~/utils/shortenText'
 
 interface Props {
+  employerAddress: string
+  employeeAddress: string
   className?: string
   newLabel: boolean
   paid: boolean
   avatar: string
-  name: string
 }
 
-export function EmployeeBox({ className, newLabel, paid, avatar, name }: Props) {
+export function EmployeeBox({ employerAddress, employeeAddress, className, newLabel, paid, avatar }: Props) {
+  const { data, isLoading } = useQuery({
+    queryKey: ['jobByBoth', employerAddress, employeeAddress],
+    queryFn: async () => getJobByEmployerAndEmployee(employerAddress, employeeAddress),
+  })
+  const { data: ensName } = useEnsName({ address: employeeAddress })
+  const singleJob = data?.[0]
+  if (isLoading) {
+    return <Loader />
+  }
+  if (!singleJob) {
+    return 'Job not found'
+  }
 
   return (
     <div
@@ -22,10 +37,10 @@ export function EmployeeBox({ className, newLabel, paid, avatar, name }: Props) 
     >
       <div className="flex gap-8 items-center">
         <Image alt="avatar" src={avatar} width={80} height={80} />
-        <div className="font-semibold text-lg">{shortenText(name)}</div>
+        <div className="font-semibold text-lg">{ensName ?? shortenText(employeeAddress)}</div>
       </div>
 
-      <Salary primary={5000} secondary={10000} />
+      <Salary primary={singleJob.stablecoinSalary} secondary={singleJob.tokenSalary} />
 
       <div className="flex gap-2">
         {paid ? (

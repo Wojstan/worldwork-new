@@ -1,3 +1,5 @@
+"use client"
+
 import { useScaffoldReadContract } from '~~/hooks/scaffold-eth'
 import { Heading1 } from '../ui/Heading1'
 import { EmployeeBox } from './EmoployeeBox'
@@ -21,7 +23,7 @@ export function CompanyEmployees() {
 
       <div className="flex flex-col gap-3 mt-8">
         {employees && employees.map((employee, i) => (
-          <EmployeeBox key={employee.worker} paid={i == 0} newLabel={i == 0} avatar={'/doe.png'} name={employee.worker}/>
+          <EmployeeBox employerAddress={employee.employer} employeeAddress={employee.worker} key={employee.worker} paid={i == 0} newLabel={i == 0} avatar={'/doe.png'}/>
         ))}
         { employees?.length == 0 && <div className="text-center">You have no employees yet</div>}
       </div>

@@ -26,6 +26,7 @@ export const job = pgTable('job', {
   tokenSalary: integer('tokenSalary').notNull().default(0),
   signed: boolean('signed').default(false),
   referenceDescription: text('referenceDescription'),
+  paid: boolean('paid').default(false),
 }, (table) => ({
   pk: primaryKey({columns: [table.employer, table.arrayIndex]}),
 }))

@@ -33,7 +33,7 @@ const AddJob: NextPage = () => {
       position: formData.get('position'),
       description: formData.get('description'),
       employer: address,
-      arrayIndex: 3,
+      arrayIndex: data?.length || 0,
       stablecoinSalary: parseInt(stablecoinValue || '0'), 
       tokenSalary: parseInt(tokenValue || '0'),
       location: 'Berlin, Germany',

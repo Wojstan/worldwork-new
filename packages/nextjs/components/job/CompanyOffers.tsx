@@ -31,8 +31,6 @@ export function CompanyOffers() {
 
   const isLoading = isLoadingJobs || isLoadingOffers || !data || !dataFromContract
 
-  console.log('dataFromContract', dataFromContract)
-
   return (
     <div>
       <Heading1>Company data</Heading1>

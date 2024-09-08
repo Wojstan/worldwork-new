@@ -5,6 +5,8 @@ import { Heading3 } from '../ui/Heading3'
 import { ArrowRightIcon } from '@heroicons/react/20/solid'
 import { companies } from '~~/constants/company'
 import { Employee, Employer, Job } from '~~/db/schema'
+import { useScaffoldReadContract } from '~~/hooks/scaffold-eth'
+import { useAccount } from 'wagmi'
 
 interface JobBoxProps {
   className?: string
@@ -47,6 +49,16 @@ interface JobBoxLinkProps {
 
 export function JobBoxLink({ job, employer, hideArrow = false, className, href }: JobBoxLinkProps) {
   const { stablecoinSalary: primarySalary, tokenSalary: secondarySalary, location, position } = job
+  const { address } = useAccount()
+  const { data } = useScaffoldReadContract({
+    contractName: 'WorldWork',
+    functionName: 'getJobApplicants',
+    args: [job.employer, BigInt(job.arrayIndex)],
+  })
+
+  if (data?.find((applicant) => applicant === address)) {
+    return null
+  }
 
   if (!employer) {
     return 'No employee found for this job'

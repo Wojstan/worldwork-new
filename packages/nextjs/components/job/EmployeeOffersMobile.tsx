@@ -86,7 +86,9 @@ function CurrentOffer({
   const [expand, setExpand] = useState(false)
   if (!job) return <Loader />
 
-  const { name, position, location, stablecoinSalary, tokenSalary, description } = job.job
+  const { position, location, stablecoinSalary, tokenSalary, description } = job.job
+
+  const name = job.employer?.name
 
   const className = expand ? 'translate-y-[-18rem]' : ''
 
@@ -98,7 +100,7 @@ function CurrentOffer({
       className={`bg-white z-40 border border-[#FF32D2] rounded-3xl p-8 text-xl relative ${className}`}
     >
       <div className="flex gap-6 items-center mb-6">
-        <Image alt="avatar" src={companies[name]} width={60} height={60} />
+        {name && <Image alt="avatar" src={companies[name]} width={60} height={60} />}
         <div className="font-bold text-xxl text-black">{name}</div>
       </div>
       <div>{position}</div>

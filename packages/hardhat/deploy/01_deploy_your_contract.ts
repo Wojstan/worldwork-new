@@ -51,7 +51,7 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
 
 
 
-  await deploy("WorldCare", {
+  await deploy("WorldWork", {
     from: deployer,
     log: true,
     args: [

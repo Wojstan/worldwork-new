@@ -3,10 +3,10 @@ import { BackButton } from '../ui/BackButton'
 import { Heading3 } from '../ui/Heading3'
 import { JobBox } from './Job'
 import { ProfileBox } from './Profile'
-import { Employee, Job } from '~~/db/schema'
+import { Employee, Employer, Job } from '~~/db/schema'
 
 interface Props {
-  data: { job: Job; employee: Employee | null }
+  data: { job: Job; employer: Employer | null }
   applicants: readonly string[] | undefined
 }
 
@@ -15,7 +15,7 @@ export function CompanyApplicants({ data, applicants }: Props) {
     <div>
       <BackButton href="/company/offers" />
 
-      <JobBox job={data.job} hideArrow className="bg-[#F3F4F6] rounded-3xl mt-2" />
+      <JobBox job={data.job} employer={data.employer} hideArrow className="bg-[#F3F4F6] rounded-3xl mt-2" />
 
       <Heading3 className="mt-8">Applicants ({applicants?.length || 0})</Heading3>
 

@@ -1,6 +1,6 @@
 'use server'
 
-import { and, eq, sql } from 'drizzle-orm'
+import { and, eq, isNull, sql } from 'drizzle-orm'
 import { db } from '~~/db/drizzle'
 import { NewJob, employer, job } from '~~/db/schema'
 
@@ -21,7 +21,10 @@ export const getJob = (employerAddress: string, index: number) => {
 }
 
 export const getCompanyOffers = (employer: string) => {
-  return db.select().from(job).where(eq(job.employer, employer))
+  return db
+    .select()
+    .from(job)
+    .where(and(eq(job.employer, employer), isNull(job.employee)))
 }
 
 export const getEmployeeHistory = (employee: string) => {

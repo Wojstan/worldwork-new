@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import { EmptyState } from '../EmptyState'
 import { Loader } from '../ui/Loader'
 import { useQuery } from '@tanstack/react-query'
 import { useAccount } from 'wagmi'
@@ -35,6 +36,8 @@ export function CompanyOffers() {
     <div>
       <Heading1>Company data</Heading1>
       <Heading3 className="mb-8">Your company offers:</Heading3>
+
+      {!isLoading && !data.length && <EmptyState />}
 
       {isLoading ? (
         <Loader />

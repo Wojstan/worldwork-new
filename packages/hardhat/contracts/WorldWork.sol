@@ -197,7 +197,7 @@ contract WorldWork {
 	function addDefaultJobOffer(address employer) public {
 		jobs[employer].push(
 			Job(
-				msg.sender,
+				employer,
 				Salary(100, IERC20(address(0))),
 				Salary(100, IERC20(address(0))),
 				Stage.Live,
@@ -208,7 +208,7 @@ contract WorldWork {
 	}
 
 		function addDefaultJobOfferWithWorker(address employer, address worker) public {
-		jobs[msg.sender].push(
+		jobs[employer].push(
 			Job(
 				employer,
 				Salary(100, IERC20(address(0))),

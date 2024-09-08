@@ -62,6 +62,9 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
   const transactionResponse2 = await worldWork.addDefaultValuesEmployer('0x70997970C51812dc3A010C7d01b50e0d17dc79C8');
   await transactionResponse2.wait();
 
+  const haha = await worldWork.addDefaultValuesWorker('0x9965507D1a55bcC2695C58ba16FB37d819B0A4dc');
+  await haha.wait();
+
   const transactionResponse3 = await worldWork.addDefaultJobOffer('0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266');
   await transactionResponse3.wait();
 

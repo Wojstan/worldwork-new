@@ -29,7 +29,7 @@ export function CompanyOffers() {
     args: [address],
   })
 
-  const isLoading = isLoadingJobs || isLoadingOffers
+  const isLoading = isLoadingJobs || isLoadingOffers || !data || !dataFromContract
 
   console.log('dataFromContract', dataFromContract)
 
@@ -46,7 +46,7 @@ export function CompanyOffers() {
             const contractElement = dataFromContract?.find(
               (element, i) => element.employer == job.employer && i == job.arrayIndex,
             )
-            // console.log('contractElement', contractElement)
+
             return (
               <EmployerJobBox
                 newLabel={i == 0}

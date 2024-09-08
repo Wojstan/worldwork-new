@@ -15,6 +15,7 @@ import { getJobByEmployerAndEmployee, makeJobPayment } from '~~/db/jobActions'
 import { useEthersProvider } from '~~/hooks/use-ethers-v5-provider'
 import { useEthersSigner } from '~~/hooks/use-ethers-v5-signer'
 import { shortenText } from '~~/utils/shortenText'
+import { Job } from '~~/db/schema'
 
 interface Props {
   employerAddress: string
@@ -23,12 +24,14 @@ interface Props {
   newLabel: boolean
   paid: boolean
   avatar: string
+  index: number
+  job: Job
 }
 
 const tokenAddress = '0x5c383F1AfdC3B39dD4367d16CB8Bb72605EB08A8' // DWL
 const feeRecipient = '0x0000000000000000000000000000000000000000'
 
-export function EmployeeBox({ employerAddress, employeeAddress, className, newLabel, paid, avatar }: Props) {
+export function EmployeeBox({ employerAddress, employeeAddress, className, newLabel, paid, avatar, index, job }: Props) {
   const { data: walletClient } = useWalletClient()
   const provider = useEthersProvider()
   const wagmiClient = useClient<Config>()
@@ -37,11 +40,11 @@ export function EmployeeBox({ employerAddress, employeeAddress, className, newLa
   const queryClient = useQueryClient()
 
   const { data, isLoading } = useQuery({
-    queryKey: ['jobByBoth', employerAddress, employeeAddress],
+    queryKey: ['jobByBoth', employerAddress, employeeAddress, index],
     queryFn: async () => getJobByEmployerAndEmployee(employerAddress, employeeAddress),
   })
   const { data: ensName } = useEnsName({ address: employeeAddress })
-  const singleJob = data?.[0]
+  const singleJob = job
 
   const { mutateAsync, isPending } = useMutation({
     mutationFn: async () => {
@@ -101,7 +104,7 @@ export function EmployeeBox({ employerAddress, employeeAddress, className, newLa
       }
       await makeJobPayment(singleJob.employer, singleJob.arrayIndex)
     },
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['jobByBoth'] }),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['allJobs'] }),
   })
 
   if (isLoading) {

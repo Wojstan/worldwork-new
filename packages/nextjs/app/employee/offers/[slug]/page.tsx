@@ -62,7 +62,7 @@ const JobDetails = ({ params }: { params: { slug: string} }) => {
     <>
       <BackButton href="/employee/offers" />
       <div className="flex flex-col gap-10">
-        <JobBox key={data?.job.name} employer={data.employer} job={data.job} hideArrow />
+        <JobBox key={data?.job.employer + data.job.arrayIndex} employer={data.employer} job={data.job} hideArrow />
         <div>
           {paragraphs.map((paragraph, index) => (
             <Fragment key={index}>

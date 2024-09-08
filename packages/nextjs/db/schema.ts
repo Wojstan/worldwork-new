@@ -17,7 +17,6 @@ export const job = pgTable('job', {
   employer: text('employer').notNull(),
   employee: text('worker'),
   arrayIndex: integer('arrayIndex').notNull(),
-  name: text('name').notNull().default(''),
   description: text('description').notNull(),
   startDate: date('startDate'),
   endDate: date('endDate'),

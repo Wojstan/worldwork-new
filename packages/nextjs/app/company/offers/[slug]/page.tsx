@@ -1,13 +1,11 @@
 'use client'
 
-import Link from 'next/link'
-import { JobBox } from '~~/components/job/Job'
-import { ProfileBox } from '~~/components/job/Profile'
-import { BackButton } from '~~/components/ui/BackButton'
-import { Heading3 } from '~~/components/ui/Heading3'
-import { useAccount } from 'wagmi'
-import { getJob } from '~~/db/jobActions'
 import { useQuery } from '@tanstack/react-query'
+import { useAccount } from 'wagmi'
+import { CompanyApplicants } from '~~/components/job/CompanyApplicants'
+import { CompanyApplicantsMobile } from '~~/components/job/CompanyApplicantsMobile'
+import { getJob } from '~~/db/jobActions'
+import { isMobileView } from '~~/hooks/isMobileView'
 import { useScaffoldReadContract } from '~~/hooks/scaffold-eth'
 
 // const job = {
@@ -39,12 +37,13 @@ import { useScaffoldReadContract } from '~~/hooks/scaffold-eth'
 
 const Jobs = ({ params }: { params: { slug: string } }) => {
   const { address } = useAccount()
+  const isMobile = isMobileView()
 
   const { data } = useQuery({
     queryKey: ['getJob', address, params.slug],
     queryFn: async () => {
       if (!address) return undefined
-      const job =  await getJob(address, parseInt(params.slug))
+      const job = await getJob(address, parseInt(params.slug))
       return job[0]
     },
     enabled: !!address,
@@ -56,26 +55,14 @@ const Jobs = ({ params }: { params: { slug: string } }) => {
     args: [address, BigInt(parseInt(params.slug))],
   })
 
-  if (!data) return "No data..."
+  if (!data) return 'No data...'
 
-  return (
-    <div>
-      <BackButton href="/company/offers" />
 
-      <JobBox job={data.job} employer={data.employer} hideArrow className="bg-[#F3F4F6] rounded-3xl mt-2" />
+  if (isMobile) {
+    return <CompanyApplicantsMobile applicants={applicants} />
+  }
 
-      <Heading3 className="mt-8">Applicants ({applicants?.length || 0})</Heading3>
-
-      {applicants?.map((applicant, i) => (
-        <Link key={applicant} href={`/employee/${i}`}>
-          <ProfileBox
-            name={applicant}
-            className={i % 2 ? 'bg-primary hover:bg-[#b99dde]' : 'bg-secondary hover:bg-[#fcd46e]'}
-          />
-        </Link>
-      ))}
-    </div>
-  )
+  return <CompanyApplicants data={data} applicants={applicants} />
 }
 
 export default Jobs

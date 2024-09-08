@@ -4,6 +4,7 @@ import { useQuery } from '@tanstack/react-query'
 import { useAccount } from 'wagmi'
 import { CompanyApplicants } from '~~/components/job/CompanyApplicants'
 import { CompanyApplicantsMobile } from '~~/components/job/CompanyApplicantsMobile'
+import { Loader } from '~~/components/ui/Loader'
 import { getJob } from '~~/db/jobActions'
 import { isMobileView } from '~~/hooks/isMobileView'
 import { useScaffoldReadContract } from '~~/hooks/scaffold-eth'
@@ -55,8 +56,7 @@ const Jobs = ({ params }: { params: { slug: string } }) => {
     args: [address, BigInt(parseInt(params.slug))],
   })
 
-  if (!data) return 'No data...'
-
+  if (!data) return <Loader />
 
   if (isMobile) {
     return <CompanyApplicantsMobile applicants={applicants} />

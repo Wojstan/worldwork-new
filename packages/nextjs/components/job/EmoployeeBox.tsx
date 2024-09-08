@@ -1,19 +1,20 @@
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 import { Salary } from '../Salary'
 import { Button } from '../ui/Button'
+import { approveErc20, hasErc20Approval, hasSufficientFunds, payRequest } from '@requestnetwork/payment-processor'
+import { RequestNetwork, Types, Utils } from '@requestnetwork/request-client.js'
+import { Web3SignatureProvider } from '@requestnetwork/web3-signature'
 import { useMutation, useQuery } from '@tanstack/react-query'
+import { Address, Hex, parseUnits } from 'viem'
+import { waitForTransactionReceipt } from 'viem/actions'
 import { Config, useClient, useEnsName, useWalletClient } from 'wagmi'
 import { CheckIcon } from '@heroicons/react/20/solid'
 import { Loader } from '~~/components/ui/Loader'
 import { getJobByEmployerAndEmployee, makeJobPayment } from '~~/db/jobActions'
+import { useEthersProvider } from '~~/hooks/use-ethers-v5-provider'
+import { useEthersSigner } from '~~/hooks/use-ethers-v5-signer'
 import { shortenText } from '~~/utils/shortenText'
-import { Address, Hex, parseUnits } from "viem";
-import { useEthersProvider } from "~~/hooks/use-ethers-v5-provider";
-import { useEthersSigner } from "~~/hooks/use-ethers-v5-signer";
-import { Web3SignatureProvider } from "@requestnetwork/web3-signature";
-import { RequestNetwork, Types, Utils } from "@requestnetwork/request-client.js";
-import { approveErc20, hasErc20Approval, hasSufficientFunds, payRequest } from "@requestnetwork/payment-processor";
-import { waitForTransactionReceipt } from "viem/actions";
 
 interface Props {
   employerAddress: string
@@ -25,13 +26,14 @@ interface Props {
 }
 
 const tokenAddress = '0x5c383F1AfdC3B39dD4367d16CB8Bb72605EB08A8' // DWL
-const feeRecipient = '0x0000000000000000000000000000000000000000';
+const feeRecipient = '0x0000000000000000000000000000000000000000'
 
 export function EmployeeBox({ employerAddress, employeeAddress, className, newLabel, paid, avatar }: Props) {
-  const { data: walletClient } = useWalletClient();
-  const provider = useEthersProvider();
+  const { data: walletClient } = useWalletClient()
+  const provider = useEthersProvider()
   const wagmiClient = useClient<Config>()
-  const signer = useEthersSigner();
+  const signer = useEthersSigner()
+  const router = useRouter()
 
   const { data, isLoading } = useQuery({
     queryKey: ['jobByBoth', employerAddress, employeeAddress],
@@ -48,62 +50,57 @@ export function EmployeeBox({ employerAddress, employeeAddress, className, newLa
       if (!singleJob) {
         throw new Error('No job')
       }
-      const web3SignatureProvider = new Web3SignatureProvider(walletClient);
+      const web3SignatureProvider = new Web3SignatureProvider(walletClient)
       console.log('web3SignatureProvider: ', web3SignatureProvider)
       const requestClient = new RequestNetwork({
         nodeConnectionConfig: {
-          baseURL: "https://gnosis.gateway.request.network/",
+          baseURL: 'https://gnosis.gateway.request.network/',
         },
         signatureProvider: web3SignatureProvider,
-      });
+      })
       const stringAmount = singleJob.stablecoinSalary ?? singleJob.tokenSalary ?? 0
       const paymentAmount = parseUnits(stringAmount.toString(), 18)
       const paymentInfo = newPaymentInfo(paymentAmount.toString(), singleJob.employer, singleJob.employee ?? '')
       console.log('paymentInfo: ', paymentInfo)
-      const request = await requestClient.createRequest(paymentInfo);
+      const request = await requestClient.createRequest(paymentInfo)
       console.log('request: ', request)
-      const confirmedRequestData = await request.waitForConfirmation();
+      const confirmedRequestData = await request.waitForConfirmation()
       console.log('confirmedRequestData: ', confirmedRequestData)
 
-      const onChainRequest = await requestClient.fromRequestId(confirmedRequestData.requestId);
-      const requestData = onChainRequest.getData();
+      const onChainRequest = await requestClient.fromRequestId(confirmedRequestData.requestId)
+      const requestData = onChainRequest.getData()
       console.log('requestData: ', requestData)
 
-      const _hasSufficientFunds = await hasSufficientFunds(
-        {
-          request: requestData,
-          address: singleJob.employer,
-          providerOptions: {
-            provider: provider,
-          },
+      const _hasSufficientFunds = await hasSufficientFunds({
+        request: requestData,
+        address: singleJob.employer,
+        providerOptions: {
+          provider: provider,
         },
-      );
+      })
       if (!_hasSufficientFunds) {
         throw new Error('No sufficient funds')
       }
 
-      const _hasErc20Approval = await hasErc20Approval(
-        requestData,
-        singleJob.employer,
-        provider
-      );
+      const _hasErc20Approval = await hasErc20Approval(requestData, singleJob.employer, provider)
       if (!_hasErc20Approval) {
-        const approvalTx = await approveErc20(requestData, signer);
+        const approvalTx = await approveErc20(requestData, signer)
         await waitForTransactionReceipt(wagmiClient, { hash: approvalTx.hash as Hex })
       }
-      const paymentTx = await payRequest(requestData, signer);
+      const paymentTx = await payRequest(requestData, signer)
       await waitForTransactionReceipt(wagmiClient, { hash: paymentTx.hash as Hex })
 
       let balance = requestData?.balance?.balance ?? '0'
       console.log('balance: ', balance)
       while (balance < requestData.expectedAmount) {
-        const requestData = await request.refresh();
+        const requestData = await request.refresh()
         balance = requestData.balance?.balance ?? '0'
         console.log('balance: ', balance)
-        await new Promise((resolve) => setTimeout(resolve, 1000));
+        await new Promise((resolve) => setTimeout(resolve, 1000))
       }
       await makeJobPayment(singleJob.employer, singleJob.arrayIndex)
-    }
+    },
+    onSuccess: () => router.push('/company/offers'),
   })
 
   if (isLoading) {
@@ -131,7 +128,9 @@ export function EmployeeBox({ employerAddress, employeeAddress, className, newLa
             PAID
           </div>
         ) : (
-          <Button className="min-w-0" isLoading={isPending} onClick={mutateAsync}>Pay salary</Button>
+          <Button className="min-w-0" isLoading={isPending} onClick={mutateAsync}>
+            Pay salary
+          </Button>
         )}
 
         <button className="btn bg-[#F9DEDC] border-[#F87171] hover:bg-[#f8c7c3] rounded-full hover:border-[#F87171]">

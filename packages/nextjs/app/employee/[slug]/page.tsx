@@ -4,6 +4,7 @@ import { Heading3 } from '~~/components/ui/Heading3'
 import { getEmployee } from '~~/db/employeeActions'
 import { getEmployeeHistory } from '~~/db/jobActions'
 import { Job } from '~~/db/schema'
+import { ApplicationButtons } from "~~/app/employee/[slug]/ApplicationButtons";
 
 export interface Reference extends Job {
   description: string
@@ -38,10 +39,7 @@ const Profile = async ({ params }: { params: { slug: string } }) => {
         ))}
       </ul>
 
-      <div className="flex justify-center items-center gap-4">
-        <button className="btn bg-[#F8E5E5] text-red-600 rounded-full min-w-60">Reject application</button>
-        <button className="btn bg-[#AAF767] text-green-800 rounded-full min-w-60">Approve application</button>
-      </div>
+      <ApplicationButtons employee={employeeAddress} />
     </div>
   )
 }

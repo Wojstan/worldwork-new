@@ -1,4 +1,4 @@
-import { boolean, integer, pgTable, primaryKey, text } from 'drizzle-orm/pg-core'
+import { boolean, date, integer, pgTable, primaryKey, text } from 'drizzle-orm/pg-core'
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
 
@@ -19,8 +19,8 @@ export const job = pgTable('job', {
   arrayIndex: integer('arrayIndex').notNull(),
   name: text('name').notNull().default(''),
   description: text('description').notNull(),
-  startDate: text('startDate'),
-  endDate: text('endDate'),
+  startDate: date('startDate'),
+  endDate: date('endDate'),
   location: text('location'),
   position: text('position'),
   stablecoinSalary: integer('stablecoinSalary').notNull().default(0),

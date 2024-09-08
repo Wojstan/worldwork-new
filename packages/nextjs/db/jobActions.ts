@@ -1,9 +1,8 @@
-"use server"
+'use server'
 
-import { employer,employee, job, NewJob } from "~~/db/schema";
-import { db } from "~~/db/drizzle";
-import { eq, and } from 'drizzle-orm'
-
+import { and, eq, sql } from 'drizzle-orm'
+import { db } from '~~/db/drizzle'
+import { NewJob, employer, job } from '~~/db/schema'
 
 export const addJobOffer = (newJob: NewJob) => {
   return db.insert(job).values(newJob).returning()
@@ -23,4 +22,15 @@ export const getCompanyOffers = (employer: string) => {
 
 export const getEmployeeHistory = (employee: string) => {
   return db.select().from(job).where(eq(job.employee, employee))
+}
+
+export const acceptEmployeeForJob = async (employeeAddress: string, employer: string, index: number) => {
+  await db
+    .update(job)
+    .set({
+      employee: employeeAddress,
+      startDate: sql`now()`,
+      signed: true,
+    })
+    .where(and(eq(job.employer, employer), eq(job.arrayIndex, index)))
 }

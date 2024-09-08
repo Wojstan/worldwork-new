@@ -1,29 +1,14 @@
 'use client'
 
 import Link from 'next/link'
+import { useQuery } from '@tanstack/react-query'
+import { useAccount } from 'wagmi'
 import { EmployerJobBox } from '~~/components/job/EmployerJob'
 import { Button } from '~~/components/ui/Button'
 import { Heading1 } from '~~/components/ui/Heading1'
 import { Heading3 } from '~~/components/ui/Heading3'
-import { useQuery } from '@tanstack/react-query'
 import { getCompanyOffers } from '~~/db/jobActions'
-import { useAccount } from 'wagmi'
 import { useScaffoldReadContract } from '~~/hooks/scaffold-eth'
-
-// const jobs: Job[] = [
-//   {
-//     position: 'UX/UI Designer',
-//     primarySalary: 5000,
-//     secondarySalary: 10000,
-//     location: 'Berlin, Germany',
-//   },
-//   {
-//     position: 'React Developer',
-//     primarySalary: 5000,
-//     secondarySalary: 10000,
-//     location: 'Warsaw, Poland',
-//   },
-// ]
 
 export function CompanyOffers() {
   const { address } = useAccount()
@@ -40,7 +25,7 @@ export function CompanyOffers() {
   const { data: dataFromContract } = useScaffoldReadContract({
     contractName: 'WorldWork',
     functionName: 'getJobs',
-    args: [address]
+    args: [address],
   })
 
   console.log('dataFromContract', dataFromContract)
@@ -48,14 +33,22 @@ export function CompanyOffers() {
   return (
     <div>
       <Heading1>Company data</Heading1>
-      <Heading3 className='mb-8'>Your company offers:</Heading3>
+      <Heading3 className="mb-8">Your company offers:</Heading3>
 
       <div className="flex flex-col gap-3">
         {data?.map((job, i) => {
-          const contractElement = dataFromContract?.find((element, i) => element.employer == job.employer && i == job.arrayIndex)
+          const contractElement = dataFromContract?.find(
+            (element, i) => element.employer == job.employer && i == job.arrayIndex,
+          )
           // console.log('contractElement', contractElement)
           return (
-            <EmployerJobBox newLabel={i == 0} key={job.arrayIndex} job={job} index={i} numberOfApplicants={contractElement?.applicants.length}/>
+            <EmployerJobBox
+              newLabel={i == 0}
+              key={job.arrayIndex}
+              job={job}
+              index={i}
+              numberOfApplicants={contractElement?.applicants.length}
+            />
           )
         })}
       </div>

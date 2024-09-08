@@ -18,7 +18,7 @@ export function ProfileBox({ name, className }: Props) {
       <div className="flex items-center justify-between mb-4 text-lg">
         <div className="flex gap-8 items-center">
           <Image alt="profile" src={avatar} width={90} height={90} />
-          <div className="font-bold">{shortenText(name)}</div>
+          <div className="font-bold">{shortenText(name, 10, 0)}</div>
         </div>
         <div>{email}</div>
         <div className="font-bold">{phone}</div>

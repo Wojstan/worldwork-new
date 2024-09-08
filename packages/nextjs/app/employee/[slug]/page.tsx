@@ -29,7 +29,7 @@ const Profile = async ({ params }: { params: { slug: string } }) => {
 
   return (
     <div className="mt-2">
-      <ProfileBox className="bg-secondary" name={employee[0]?.name ?? ''} />
+      <ProfileBox className="bg-secondary" name={employee[0]?.name ?? 'alex.eth'} />
 
       <Heading3 className="mb-6">Experience:</Heading3>
 

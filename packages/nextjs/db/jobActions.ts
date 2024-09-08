@@ -45,3 +45,12 @@ export const getJobByEmployerAndEmployee = async (employerAddress: string, emplo
     .from(job)
     .where(and(eq(job.employer, employerAddress), eq(job.employee, employeeAddress)))
 }
+
+export const makeJobPayment = async (employer: string, index: number) => {
+  await db
+    .update(job)
+    .set({
+      paid: true
+    })
+    .where(and(eq(job.employer, employer), eq(job.arrayIndex, index)))
+}
